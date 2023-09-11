@@ -1,7 +1,7 @@
 # 第３回講座の課題
 ## Webアプリケーションの起動
 
-![画像](/RaiseTech/AWS-Lecture03.png)
+![画像](./AWS-Lecture03.png)
 
 ## AP サーバーの名前とバージョン&動作確認
 - Puma version 5.6.5
