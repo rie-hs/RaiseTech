@@ -24,15 +24,16 @@ CloudTrail>イベント履歴で確認
 ![アクション](./lecture06-images/06-02-03_UnHealthy_action.png)
 
 * アプリケーション起動時：OKメールが送信される
-![OKmail](./lecture06-images/06-02-04_.OKmail.png)
+![OKmail](./lecture06-images/06-02-04_OKmail.png)
 
 * アプリケーション停止時：ALARMメールが送信される
-![ALARMmail](./lecture06-images/06-02-05_.ALARMmail.png)
+![ALARMmail](./lecture06-images/06-02-05_ALARMmail.png)
 
 
 ## コスト管理
 ### AWS利用料の見積もりの作成
 AWS Pricing Calculatorより作成
+
 [見積もり](https://calculator.aws/#/estimate?id=f3a89c939e52637fec8d4fdaf58a90e50a2e7a80)
 
 ### 現在の利用料
@@ -40,10 +41,10 @@ AWS Pricing Calculatorより作成
 ![10月利用料](./lecture06-images/06-03-01-billing_total_Oct.png)
 
 * 9月の利用料：請求期間を9月に変更
-![9月利用料](./lecture06-images/06-03-02-billing_total_Sep.png)
+![9月利用料](./lecture06-images/06-03-02_billing_total_Sep.png)
 
 * EC2の料金
-![9月EC2料金](./lecture06-images/06-03-03-billing_EC2_Sep.png)
+![9月EC2料金](./lecture06-images/06-03-03_billing_EC2_Sep.png)
 
 EC2は本課題作成時（10月）は無料枠内だが、今月Data Transferで0.01$の請求予定がある。
 
