@@ -5,7 +5,7 @@ CloudTrail>イベント履歴で確認
 ![イベント](./lecture06-images/06-01-01_CloudTrail.event.png)
 上記よりIAMユーザー名のイベントを抜粋
 
-1. ConsoleLogin ：AWS Management Consoleにブラウザ経由でログインした場合に記録
+1. ConsoleLogin：AWS Management Consoleにブラウザ経由でログインした場合に記録
 ![ConsoleLogin](./lecture06-images/06-01-02-event_ConsoleLogin.png)
 
 2. CheckMfa：MFAを確認またはチェックした場合に記録（今回はAWSリソースにアクセスしようとするユーザーがMFAを使用して認証した。）
@@ -34,7 +34,7 @@ CloudTrail>イベント履歴で確認
 ### AWS利用料の見積もりの作成
 AWS Pricing Calculatorより作成
 
-[見積もり](https://calculator.aws/#/estimate?id=f3a89c939e52637fec8d4fdaf58a90e50a2e7a80)
+[見積もり](https://calculator.aws/#/estimate?id=86b499a3d0f2dd543d5602859d110bb45016e787)
 
 ### 現在の利用料
 * 10月の利用料
