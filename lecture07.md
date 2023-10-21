@@ -11,7 +11,7 @@
     * Webアプリケーションの脆弱性を突いた攻撃に対して動作し、不正なリクエスを検知・無効化する
     * AWSManagedRulesCommonRuleSet：AWS WAFのうち、ウェブアプリケーションに一般的に適用できるルールグループ。OWASP Top 10がサポートされており、これを使用することが前提ということはAWSでは推奨されている。
 
-* CM(AWS Certificate Manager) Certificate:証明書
+* ACM(AWS Certificate Manager) Certificate:証明書
     * SSL証明書を発行するサービス
 
 * Inspector：検査官や監視員という意味
@@ -56,7 +56,7 @@
 
 
 ## 現在課題で作成している環境の脆弱性
-* URLの先頭がhttp://であり、SSL接続を採用していない。そのため通信が暗号されておらず第三者に情報が漏れたり、改ざんされるリスクがある。
+* URLの先頭が`http://`であり、SSL接続を採用していない。そのため通信が暗号されておらず第三者に情報が漏れたり、改ざんされるリスクがある。
 
 * IAMユーザーの権限がAdministratorAccessのため広範囲に権限が許可されている。
 
