@@ -1,0 +1,116 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: create SG
+
+Parameters:
+  NameBase:
+    Description: this is base name.
+    Type: String
+    Default: RaiseTech-lecture10
+
+Resources: 
+# EC2のSecurityGroupの作成
+  lecture10EC2SG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: lecture10-EC2-SG
+      VpcId: !ImportValue lecture10VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 133.32.135.20/32
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 3000
+          ToPort: 3000
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: !Sub EC2-SG-${NameBase}
+
+# RDSのSecurityGroupの作成
+  lecture10RDSSG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: lecture10-RDS-SG
+      VpcId: !ImportValue lecture10VPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          SourceSecurityGroupId: !Ref lecture10EC2SG
+      Tags:
+         - Key: Name
+           Value: !Sub RDS-SG-${NameBase}
+
+# ALBのSecurityGroupの作成
+  lecture10ALBSG:
+      Type: AWS::EC2::SecurityGroup
+      Properties:
+        GroupDescription: lecture10-ALB-SG
+        VpcId: !ImportValue lecture10VPC
+        SecurityGroupIngress:
+          - IpProtocol: tcp
+            FromPort: 22
+            ToPort: 22
+            CidrIp: 133.32.135.20/32
+          - IpProtocol: tcp
+            FromPort: 80
+            ToPort: 80
+            CidrIp: 0.0.0.0/0
+          - IpProtocol: tcp
+            FromPort: 3000
+            ToPort: 3000
+            CidrIp: 0.0.0.0/0
+        Tags:
+          - Key: Name
+            Value: !Sub ALB-SG-${NameBase}
+
+# IAMロールの作成
+  S3IAMRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement: 
+          - Effect: "Allow"
+            Principal: 
+              Service: 
+                - "ec2.amazonaws.com"
+            Action: 
+              - "sts:AssumeRole"
+      ManagedPolicyArns: 
+        - arn:aws:iam::aws:policy/AmazonS3FullAccess
+
+# IMAインスタンスプロファイルの作成：EC2インスタンスとロールを紐づけるために作成
+  S3AccessInstanceProfile:
+    Type: AWS::IAM::InstanceProfile
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref S3IAMRole
+
+Outputs:
+  EC2SG:
+    Value: !Ref lecture10EC2SG
+    Export: 
+      Name: lecture10EC2SG
+  
+  RDSSG:
+    Value: !Ref lecture10RDSSG
+    Export: 
+      Name: lecture10RDSSG
+  
+  ALBSG:
+    Value: !Ref lecture10ALBSG
+    Export: 
+      Name: lecture10ALBSG
+
+  IAMInstanceProfile:
+    Value: !Ref S3AccessInstanceProfile
+    Export: 
+      Name: S3AccessInstanceProfile

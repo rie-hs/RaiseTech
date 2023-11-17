@@ -1,0 +1,154 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: RaiseTech-lecture10-CF create EC2 
+
+Parameters: 
+  NameBase:
+    Description: this is base name.
+    Type: String
+    Default: RaiseTech-lecture10
+
+
+  EC2ImageID:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+
+  RDSMasterUserPassword:
+    NoEcho: true
+    Type: String
+    MinLength: 8
+    MaxLength: 41
+    AllowedPattern: "[a-zA-Z0-9]*"
+    Default: RDSpassword1
+
+Resources:
+  KeyPair:
+    Type: 'AWS::EC2::KeyPair'
+    Properties:
+      KeyName: !Sub KeyPair-${NameBase}
+
+# EC2インスタンスの作成
+  lecture10EC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref KeyPair
+      DisableApiTermination: false
+      ImageId: !Ref EC2ImageID
+      InstanceType: t2.micro
+      Monitoring: true
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId: !ImportValue PublicSubnet1
+          GroupSet:
+           - !ImportValue lecture10EC2SG
+      UserData: !Base64 |
+        #!/bin/bash -ex
+        yum update -y
+      IamInstanceProfile:
+        !ImportValue S3AccessInstanceProfile
+      Tags:
+        - Key: Name
+          Value: !Sub EC2Instance-${NameBase}
+
+# RDS関連の作成
+  RDSDBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: lecture10-RDS-SubnetGroup
+      SubnetIds:
+        - !ImportValue PrivateSubnet1
+        - !ImportValue PrivateSubnet2
+      Tags:
+        - Key: Name
+          Value: !Sub RDSDBSubnetGroup-${NameBase}
+
+  lecture10RDS:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: 20
+      DBInstanceClass: db.t3.micro
+      AutoMinorVersionUpgrade: true
+      BackupRetentionPeriod: 1
+      Engine: mysql 
+      MasterUsername: admin
+      MasterUserPassword: !Ref RDSMasterUserPassword
+      DBSubnetGroupName: !Ref RDSDBSubnetGroup
+      MultiAZ: false
+      PubliclyAccessible: false
+      StorageEncrypted: true
+      StorageType: gp2
+      VPCSecurityGroups:
+        - !ImportValue lecture10RDSSG
+      Tags:
+        - Key: Name
+          Value: !Sub RDS-${NameBase}
+
+# ALBの作成
+  lecture10ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ALB-${NameBase}
+      Scheme: internet-facing
+      SecurityGroups: 
+        - !ImportValue lecture10ALBSG
+      Subnets: 
+        - !ImportValue PublicSubnet1
+        - !ImportValue PublicSubnet2
+      Tags: 
+        - Key: Name
+          Value: !Sub ALB-${NameBase}
+      Type: application
+
+# ALB用のターゲットグループの作成
+  ALBTG:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /
+      HealthCheckPort: 80
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 5
+      IpAddressType: ipv4
+      Matcher: 
+        HttpCode: 200
+      Name: !Sub ALB-TG-${NameBase}
+      Port: 80
+      Protocol: HTTP
+      ProtocolVersion: HTTP1
+      Tags: 
+        - Key: Name
+          Value: !Sub ALB-TG-${NameBase}
+      Targets: 
+        - Id: !Ref lecture10EC2
+      TargetType: instance
+      UnhealthyThresholdCount: 2
+      VpcId: !ImportValue lecture10VPC
+
+# リスナーの作成
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions: 
+        - TargetGroupArn: !Ref ALBTG
+          Type: forward
+      LoadBalancerArn: !Ref lecture10ALB
+      Port: 80
+      Protocol: HTTP
+
+# S3バケットの作成
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties: 
+      AccessControl: Private
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: True
+        BlockPublicPolicy: True
+        IgnorePublicAcls: True
+        RestrictPublicBuckets: True
+      BucketName: s3-raisetech-lecture10-202311
+      Tags:
+        - Key: Name
+          Value: s3-raisetech-lecture10-202311
