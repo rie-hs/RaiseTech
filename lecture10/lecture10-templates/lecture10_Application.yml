@@ -1,12 +1,11 @@
 AWSTemplateFormatVersion: 2010-09-09
-Description: RaiseTech-lecture10-CF create EC2 
+Description: RaiseTech-lecture10-CF create EC2 RDS ALB S3
 
 Parameters: 
   NameBase:
     Description: this is base name.
     Type: String
     Default: RaiseTech-lecture10
-
 
   EC2ImageID:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
@@ -21,13 +20,14 @@ Parameters:
     Default: RDSpassword1
 
 Resources:
+# キーペアの作成
   KeyPair:
-    Type: 'AWS::EC2::KeyPair'
+    Type: AWS::EC2::KeyPair
     Properties:
-      KeyName: !Sub KeyPair-${NameBase}
+      KeyName: !Sub ${NameBase}-KeyPair
 
 # EC2インスタンスの作成
-  lecture10EC2:
+  EC2:
     Type: AWS::EC2::Instance
     Properties:
       KeyName: !Ref KeyPair
@@ -38,17 +38,17 @@ Resources:
       NetworkInterfaces:
         - AssociatePublicIpAddress: "true"
           DeviceIndex: "0"
-          SubnetId: !ImportValue PublicSubnet1
+          SubnetId: !ImportValue RaiseTech-lecture10-PubSubnet-01-ID
           GroupSet:
-           - !ImportValue lecture10EC2SG
+           - !ImportValue RaiseTech-lecture10-EC2SG-ID
       UserData: !Base64 |
         #!/bin/bash -ex
         yum update -y
       IamInstanceProfile:
-        !ImportValue S3AccessInstanceProfile
+        !ImportValue RaiseTech-lecture10-InstanceProfile-Name
       Tags:
         - Key: Name
-          Value: !Sub EC2Instance-${NameBase}
+          Value: !Sub ${NameBase}-EC2
 
 # RDS関連の作成
   RDSDBSubnetGroup:
@@ -56,13 +56,13 @@ Resources:
     Properties:
       DBSubnetGroupDescription: lecture10-RDS-SubnetGroup
       SubnetIds:
-        - !ImportValue PrivateSubnet1
-        - !ImportValue PrivateSubnet2
+        - !ImportValue RaiseTech-lecture10-PriSubnet-01-ID
+        - !ImportValue RaiseTech-lecture10-PriSubnet-02-ID
       Tags:
         - Key: Name
-          Value: !Sub RDSDBSubnetGroup-${NameBase}
+          Value: !Sub ${NameBase}-RDSDBSubnetGroup
 
-  lecture10RDS:
+  RDS:
     Type: AWS::RDS::DBInstance
     Properties:
       AllocatedStorage: 20
@@ -78,26 +78,26 @@ Resources:
       StorageEncrypted: true
       StorageType: gp2
       VPCSecurityGroups:
-        - !ImportValue lecture10RDSSG
+        - !ImportValue RaiseTech-lecture10-RDSSG-ID
       Tags:
         - Key: Name
-          Value: !Sub RDS-${NameBase}
+          Value: !Sub ${NameBase}-RDS
 
 # ALBの作成
-  lecture10ALB:
+  ALB:
     Type: AWS::ElasticLoadBalancingV2::LoadBalancer
     Properties:
       IpAddressType: ipv4
-      Name: !Sub ALB-${NameBase}
+      Name: !Sub ${NameBase}-ALB
       Scheme: internet-facing
       SecurityGroups: 
-        - !ImportValue lecture10ALBSG
+        - !ImportValue RaiseTech-lecture10-ALBSG-ID
       Subnets: 
-        - !ImportValue PublicSubnet1
-        - !ImportValue PublicSubnet2
+        - !ImportValue RaiseTech-lecture10-PubSubnet-01-ID
+        - !ImportValue RaiseTech-lecture10-PubSubnet-02-ID
       Tags: 
         - Key: Name
-          Value: !Sub ALB-${NameBase}
+          Value: !Sub ${NameBase}-ALB
       Type: application
 
 # ALB用のターゲットグループの作成
@@ -114,18 +114,18 @@ Resources:
       IpAddressType: ipv4
       Matcher: 
         HttpCode: 200
-      Name: !Sub ALB-TG-${NameBase}
+      Name: !Sub ${NameBase}-ALBTG
       Port: 80
       Protocol: HTTP
       ProtocolVersion: HTTP1
       Tags: 
         - Key: Name
-          Value: !Sub ALB-TG-${NameBase}
+          Value: !Sub ${NameBase}-ALBTG
       Targets: 
-        - Id: !Ref lecture10EC2
+        - Id: !Ref EC2
       TargetType: instance
       UnhealthyThresholdCount: 2
-      VpcId: !ImportValue lecture10VPC
+      VpcId: !ImportValue RaiseTech-lecture10-VPC-ID
 
 # リスナーの作成
   ALBListener:
@@ -134,7 +134,7 @@ Resources:
       DefaultActions: 
         - TargetGroupArn: !Ref ALBTG
           Type: forward
-      LoadBalancerArn: !Ref lecture10ALB
+      LoadBalancerArn: !Ref ALB
       Port: 80
       Protocol: HTTP
 

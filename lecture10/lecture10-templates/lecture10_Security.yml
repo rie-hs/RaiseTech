@@ -7,18 +7,22 @@ Parameters:
     Type: String
     Default: RaiseTech-lecture10
 
+  MyIP:
+    Type: String
+    Default: 133.32.135.20/32
+
 Resources: 
 # EC2のSecurityGroupの作成
-  lecture10EC2SG:
+  EC2SG:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: lecture10-EC2-SG
-      VpcId: !ImportValue lecture10VPC
+      VpcId: !ImportValue RaiseTech-lecture10-VPC-ID
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          CidrIp: 133.32.135.20/32
+          CidrIp: !Ref MyIP
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
@@ -29,34 +33,30 @@ Resources:
           CidrIp: 0.0.0.0/0
       Tags:
         - Key: Name
-          Value: !Sub EC2-SG-${NameBase}
+          Value: !Sub ${NameBase}-EC2SG
 
 # RDSのSecurityGroupの作成
-  lecture10RDSSG:
+  RDSSG:
     Type: AWS::EC2::SecurityGroup
     Properties:
       GroupDescription: lecture10-RDS-SG
-      VpcId: !ImportValue lecture10VPC
+      VpcId: !ImportValue RaiseTech-lecture10-VPC-ID
       SecurityGroupIngress:
         - IpProtocol: tcp
           FromPort: 3306
           ToPort: 3306
-          SourceSecurityGroupId: !Ref lecture10EC2SG
+          SourceSecurityGroupId: !Ref EC2SG
       Tags:
          - Key: Name
-           Value: !Sub RDS-SG-${NameBase}
+           Value: !Sub ${NameBase}-RDSSG
 
 # ALBのSecurityGroupの作成
-  lecture10ALBSG:
+  ALBSG:
       Type: AWS::EC2::SecurityGroup
       Properties:
         GroupDescription: lecture10-ALB-SG
-        VpcId: !ImportValue lecture10VPC
+        VpcId: !ImportValue RaiseTech-lecture10-VPC-ID
         SecurityGroupIngress:
-          - IpProtocol: tcp
-            FromPort: 22
-            ToPort: 22
-            CidrIp: 133.32.135.20/32
           - IpProtocol: tcp
             FromPort: 80
             ToPort: 80
@@ -67,50 +67,60 @@ Resources:
             CidrIp: 0.0.0.0/0
         Tags:
           - Key: Name
-            Value: !Sub ALB-SG-${NameBase}
+            Value: !Sub ${NameBase}-ALBSG
 
 # IAMロールの作成
-  S3IAMRole:
+  IAMRole:
     Type: AWS::IAM::Role
     Properties:
       Path: /
       AssumeRolePolicyDocument:
-        Version: "2012-10-17"
+        Version: 2012-10-17
         Statement: 
-          - Effect: "Allow"
+          - Effect: Allow
             Principal: 
               Service: 
-                - "ec2.amazonaws.com"
+                - ec2.amazonaws.com
             Action: 
-              - "sts:AssumeRole"
+              - sts:AssumeRole
+      Policies: # パラメーターストアを管理するためのポリシー
+        - PolicyName: SSMPutAndDeleteParameterPolicy
+          PolicyDocument:
+            Version: 2012-10-17
+            Statement:
+              - Effect: Allow
+                Action: 
+                  - ssm:PutParameter
+                  - ssm:DeleteParameter
+                Resource: '*'
       ManagedPolicyArns: 
         - arn:aws:iam::aws:policy/AmazonS3FullAccess
 
 # IMAインスタンスプロファイルの作成：EC2インスタンスとロールを紐づけるために作成
-  S3AccessInstanceProfile:
+  InstanceProfile:
     Type: AWS::IAM::InstanceProfile
     Properties:
-      Path: "/"
+      Path: /
       Roles:
-        - !Ref S3IAMRole
+        - !Ref IAMRole
 
 Outputs:
   EC2SG:
-    Value: !Ref lecture10EC2SG
+    Value: !Ref EC2SG
     Export: 
-      Name: lecture10EC2SG
+      Name: !Sub ${NameBase}-EC2SG-ID
   
   RDSSG:
-    Value: !Ref lecture10RDSSG
-    Export: 
-      Name: lecture10RDSSG
+    Value: !Ref RDSSG
+    Export:
+      Name: !Sub ${NameBase}-RDSSG-ID
   
   ALBSG:
-    Value: !Ref lecture10ALBSG
+    Value: !Ref ALBSG
     Export: 
-      Name: lecture10ALBSG
+      Name: !Sub ${NameBase}-ALBSG-ID
 
   IAMInstanceProfile:
-    Value: !Ref S3AccessInstanceProfile
+    Value: !Ref InstanceProfile
     Export: 
-      Name: S3AccessInstanceProfile
+      Name: !Sub ${NameBase}-InstanceProfile-Name

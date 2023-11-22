@@ -63,6 +63,22 @@
 ![S3](./lecture10-images/10-16_S3.png)
 
 
+## 接続確認
+### 実前設定
+* HomebrewとAWS CLIのインストール
+* AWS CLIを使用できるようIAMよりアクセスキーの取得
+* 上記のアクセスキー情報やリージョン等をAWS CLIで設定
+* 作成したキーペアIDをSystems Managerのパラメーターより確認。（コマンドでも確認可能）
+* 下記コマンドでpemファイルを保存
+   ```
+   aws ssm get-parameter --name /ec2/keypair/key-キーペアのID --with-decryption --query Parameter.Value --output text > RaiseTech-lecture10-KeyPair.pem
+   ```
+### EC2にSSH接続
+![SSH接続](./lecture10-images/10-17_connectSSH.png)
+
+### EC2とRDS接続確認
+![RDS接続](./lecture10-images/10-18_connectRDS.png)
+
 ## 第１０回講座・課題作成で学んだこと
 ### 講座での学び
 * Infrastructure as Code (IaC)：インフラ自動化の前提であり、インフラ環境を全てコードで表現するという考え方
@@ -78,3 +94,4 @@
     * `Base64`：`UserData`プロパティを介して AmazonEC2インスタンスにエンコードされたデータを渡す。
 
 * .ymlファイルを作成する際にインデントの誤りで多数エラーを経験した。参照元をコピー＆ペーストをするとインデントがずれることもあったため、テンプレート作成時には気をつけたい。
+* SSH接続するためのキーペアのpemファイルをダウンロードするのに苦労した。SSH接続を行うためには①事前にコンソール画面よりキーペアを作成し、そのキーペア名CloudFormationに組み込む方法と、②CloudFormationでキーペアを作成する方法があることを知った。今回は②の方法で実践した。
