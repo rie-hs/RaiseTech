@@ -148,7 +148,4 @@ Resources:
         BlockPublicPolicy: True
         IgnorePublicAcls: True
         RestrictPublicBuckets: True
-      BucketName: s3-raisetech-lecture10-202311
-      Tags:
-        - Key: Name
-          Value: s3-raisetech-lecture10-202311
+      BucketName: raisetech-lecture10-s3 # バケット名は大文字使用不可
