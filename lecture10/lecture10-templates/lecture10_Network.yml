@@ -1,0 +1,159 @@
+AWSTemplateFormatVersion: 2010-09-09
+
+Description: RaiseTech-lecture10-CF
+
+Parameters:
+  NameBase:
+    Description: this is base name.
+    Type: String
+    Default: RaiseTech-lecture10
+
+Resources: 
+# VPCの作成
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 10.0.0.0/16
+      EnableDnsSupport: true
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-VPC
+  
+# サブネットの作成
+  PublicSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1a
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.0.0/20
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-PubSubnet-01
+
+  PublicSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1c
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.16.0/20
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-PubSubnet-02
+  
+  PrivateSubnet1:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1a
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.128.0/20
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-PriSubnet-01
+
+  PrivateSubnet2:
+    Type: AWS::EC2::Subnet
+    Properties:
+      AvailabilityZone: ap-northeast-1c
+      VpcId: !Ref VPC
+      CidrBlock: 10.0.144.0/20
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-PriSubnet-02
+
+# インターネットゲートウェイの作成
+  IGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-IGW
+
+# インターネットゲートウェイをVPCにアタッチ
+  IGWAttachment:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: !Ref VPC
+      InternetGatewayId: !Ref IGW
+
+# ルートテーブルの作成
+  PublicRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-PubRouteTable
+  
+  PrivateRouteTable1:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-PriRouteTable-01
+
+  PrivateRouteTable2:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId: !Ref VPC
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-PriRouteTable-02
+
+  PublicRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !Ref IGW
+
+ # サブネットをルートテーブルに関連付け
+  PublicSubnetARouteTableAssociation1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet1
+      RouteTableId: !Ref PublicRouteTable
+
+  PublicSubnetARouteTableAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PublicSubnet2
+      RouteTableId: !Ref PublicRouteTable
+  
+  PrivateSubnetARouteTableAssociation1:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet1
+      RouteTableId: !Ref PrivateRouteTable1
+
+  PrivateSubnetARouteTableAssociation2:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId: !Ref PrivateSubnet2
+      RouteTableId: !Ref PrivateRouteTable2
+
+Outputs:
+  VPC:
+    Value: !Ref VPC
+    Export:
+      Name: !Sub ${NameBase}-VPC-ID
+    
+  PubSubnet1:
+    Value: !Ref PublicSubnet1
+    Export:
+      Name: !Sub ${NameBase}-PubSubnet-01-ID
+
+  PubSubnet2:
+    Value: !Ref PublicSubnet2
+    Export:
+      Name: !Sub ${NameBase}-PubSubnet-02-ID
+
+  PriSubnet1:
+    Value: !Ref PrivateSubnet1
+    Export:
+      Name: !Sub ${NameBase}-PriSubnet-01-ID
+
+  PriSubnet2:
+    Value: !Ref PrivateSubnet2
+    Export:
+      Name: !Sub ${NameBase}-PriSubnet-02-ID
