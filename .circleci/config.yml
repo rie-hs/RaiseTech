@@ -16,4 +16,3 @@ workflows:
   raisetech:
     jobs:
       - cfn-lint
-      
