@@ -8,6 +8,16 @@ Parameters:
     Type: String
     Default: RaiseTech-lecture12
 
+  AvailabilityZone1a:
+    Description: Please input Availability Zone
+    Type: AWS::EC2::AvailabilityZone::Name
+    Default: ap-northeast-1a
+
+  AvailabilityZone1c:
+    Description: Please input Availability Zone
+    Type: AWS::EC2::AvailabilityZone::Name
+    Default: ap-northeast-1c
+
 Resources: 
 # VPCの作成
   VPC:
@@ -23,7 +33,7 @@ Resources:
   PublicSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: ap-northeast-1a
+      AvailabilityZone: !Ref AvailabilityZone1a
       VpcId: !Ref VPC
       CidrBlock: 10.0.0.0/20
       Tags:
@@ -33,7 +43,7 @@ Resources:
   PublicSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: ap-northeast-1c
+      AvailabilityZone: !Ref AvailabilityZone1c
       VpcId: !Ref VPC
       CidrBlock: 10.0.16.0/20
       Tags:
@@ -43,7 +53,7 @@ Resources:
   PrivateSubnet1:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: ap-northeast-1a
+      AvailabilityZone: !Ref AvailabilityZone1a
       VpcId: !Ref VPC
       CidrBlock: 10.0.128.0/20
       Tags:
@@ -53,7 +63,7 @@ Resources:
   PrivateSubnet2:
     Type: AWS::EC2::Subnet
     Properties:
-      AvailabilityZone: ap-northeast-1c
+      AvailabilityZone: !Ref AvailabilityZone1c
       VpcId: !Ref VPC
       CidrBlock: 10.0.144.0/20
       Tags:
