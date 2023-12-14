@@ -142,10 +142,23 @@ Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties: 
-      AccessControl: Private
       PublicAccessBlockConfiguration:
         BlockPublicAcls: True
         BlockPublicPolicy: True
         IgnorePublicAcls: True
         RestrictPublicBuckets: True
       BucketName: raisetech-lecture13-s3 # バケット名は大文字使用不可
+
+# S3バケットポリシーの設定
+  S3BucketPolicy
+    s3BucketPolicy:
+      Type: AWS::S3::BucketPolicy
+      Properties:
+        Bucket: !Ref S3Bucket
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Effect: Deny
+              Principal: "*"
+              Action: "s3:*"
+              Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
