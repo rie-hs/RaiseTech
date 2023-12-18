@@ -1,6 +1,7 @@
 version: 2.1
 orbs:
   python: circleci/python@2.0.3
+  aws-cli: circleci/aws-cli@4.1.2
 jobs:
   cfn-lint:
     executor: python/default
@@ -12,7 +13,23 @@ jobs:
           command: |
             cfn-lint -i W3002 -t cloudformation/*.yml
 
+  deploy cloudformation:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup
+      - run:
+          name: Deploy cloudformation
+          command: |
+            aws cloudformation deploy --template-file cloudformation/lecture13_Network.yml --stack-name lecture13_Network
+            aws cloudformation deploy --template-file cloudformation/lecture13_Security.yml --stack-name lecture13_Security
+            aws cloudformation deploy --template-file cloudformation/lecture13_Application.yml --stack-name lecture13_Application
+
+
 workflows:
   raisetech:
     jobs:
       - cfn-lint
+      - deploy cloudformation:
+          requires:
+            - cfn-lint
