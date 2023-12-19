@@ -104,9 +104,6 @@ Resources:
       Roles:
         - !Ref IAMRole
 
-Capabilities: # スタックテンプレートに AWS Identity and Access Management (IAM) リソースが含まれている場合に指定する
-  - CAPABILITY_IAM
-
 Outputs:
   EC2SG:
     Value: !Ref EC2SG
