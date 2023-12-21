@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   python: circleci/python@2.0.3
   aws-cli: circleci/aws-cli@4.1.2
+
 jobs:
   cfn-lint:
     executor: python/default
@@ -21,7 +22,6 @@ jobs:
           aws_access_key_id: AWS_ACCESS_KEY_ID
           aws_secret_access_key: AWS_SECRET_ACCESS_KEY
           region: AWS_DEFAULT_REGION
-
       - run:
           name: Deploy cloudformation
           command: |
@@ -29,6 +29,19 @@ jobs:
             aws cloudformation deploy --template-file cloudformation/lecture13_Security.yml --stack-name lecture13-Security --parameter-overrides MyIP=$MY_IP --capabilities CAPABILITY_IAM
             aws cloudformation deploy --template-file cloudformation/lecture13_Application.yml --stack-name lecture13-Application
 
+  download keypair:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - run:
+          name: Download KeyPair
+          command: |
+            if [ ! -f ~/.ssh/RaiseTech-lecture13-KeyPair.pem ]; then
+              aws ssm get-parameter --name /ec2/keypair/key-0247c2397519137a6 --with-decryption --query Parameter.Value --output text > ~/.ssh/RaiseTech-lecture13-KeyPair.pem
+              chmod 400 ~/.ssh/RaiseTech-lecture13-KeyPair.pem
+            else
+              echo "RaiseTech-lecture13-KeyPair.pem already exists. Skipping download."
+            fi
 
 workflows:
   raisetech:
@@ -37,3 +50,6 @@ workflows:
       - deploy cloudformation:
           requires:
             - cfn-lint
+      - download keypair:
+          requires:
+            - deploy cloudformation
