@@ -7,6 +7,11 @@ Parameters:
     Type: String
     Default: RaiseTech-lecture13
 
+  KeyPair:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
+    Default: RaiseTech-lecture13-KeyPair
+
   EC2ImageID:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
     Default: "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
@@ -20,12 +25,6 @@ Parameters:
     Default: RDSpassword1
 
 Resources:
-# キーペアの作成
-  KeyPair:
-    Type: AWS::EC2::KeyPair
-    Properties:
-      KeyName: !Sub ${NameBase}-KeyPair
-
 # EC2インスタンスの作成
   EC2:
     Type: AWS::EC2::Instance
