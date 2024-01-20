@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   python: circleci/python@2.0.3
   aws-cli: circleci/aws-cli@4.1.2
+  ansible-playbook: orbss/ansible-playbook@0.0.5
 
 jobs:
   cfn-lint:
@@ -29,6 +30,13 @@ jobs:
             aws cloudformation deploy --template-file cloudformation/lecture13_Security.yml --stack-name lecture13-Security --parameter-overrides MyIP=$MY_IP --capabilities CAPABILITY_IAM
             aws cloudformation deploy --template-file cloudformation/lecture13_Application.yml --stack-name lecture13-Application
 
+  execute ansible:
+    executor: ansible-playbook/default
+    steps:
+      - checkout
+      - ansible-playbook/install:
+          version: 2.16.1
+
 workflows:
   raisetech:
     jobs:
@@ -36,3 +44,6 @@ workflows:
       - deploy cloudformation:
           requires:
             - cfn-lint
+      - execute ansible:
+          requires:
+            - deploy cloudformation
