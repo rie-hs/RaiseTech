@@ -37,6 +37,7 @@ jobs:
       - ansible-playbook/install:
           version: 2.16.1
 
+
 workflows:
   raisetech:
     jobs:
