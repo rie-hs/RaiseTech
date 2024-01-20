@@ -35,7 +35,7 @@ jobs:
     steps:
       - checkout
       - ansible-playbook/install:
-          version: core 2.16.2
+          version: 2.16.2
 
 
 workflows:
