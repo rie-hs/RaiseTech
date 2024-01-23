@@ -1,0 +1,31 @@
+---
+#- name: setup app
+#  shell: bash -lc "bin/setup"
+#  args:
+#    chdir: "{{ app_dir }}"
+
+- name: Configure development.rb.j2
+  template:
+    src: development.rb.j2 # コピー元のファイルパス
+    dest: "{{ app_dir }}/config/environments/development.rb" # コピー先のパス
+
+- name: Set S3
+  template:
+    src: storage.yml.j2  # コピー元のファイルパス
+    dest: "{{ app_dir }}/config/storage.yml" # コピー先のパス
+
+- name: Precompile application assets
+  shell: bash -lc "rails assets:precompile"
+  args:
+    chdir: "{{ app_dir }}"
+
+- name: Restart nginx
+  become: yes
+  service:
+    name: nginx
+    state: restarted
+
+- name: Start unicorn
+  shell: bash -lc "bundle exec unicorn_rails -c config/unicorn.rb -E development -D"
+  args:
+    chdir: "{{ app_dir }}"

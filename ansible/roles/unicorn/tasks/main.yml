@@ -1,0 +1,16 @@
+---
+- name: Set unicorn
+  become: yes
+  template:
+    src: Gemfile.j2 
+    dest: "{{ app_dir }}/Gemfile"
+
+- name: bundle install
+  shell: bash -lc "bundle install"
+  args:
+    chdir: "{{ app_dir }}"
+
+- name: Configure unicorn.rb
+  template:
+    src: unicorn.rb.j2 # コピー元のファイルパス
+    dest: "{{ app_dir }}/config/unicorn.rb" # コピー先のパス
