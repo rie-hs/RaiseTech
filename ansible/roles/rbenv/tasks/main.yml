@@ -38,23 +38,19 @@
   lineinfile: # ファイルないの特定の行に変更を加えるためのモジュール
     path: /home/ec2-user/.bash_profile
     line: 'export PATH="$HOME/.rbenv/bin:$PATH"'
-#   when: rbenv_exists is failed
 
 - name: Enable shims and autocompletion for rbenv
   lineinfile:
     path: /home/ec2-user/.bash_profile
     line: 'eval "$(rbenv init -)"'
-#   when: rbenv_exists is failed
 
 - name: Reload bash profile
   shell: source /home/ec2-user/.bash_profile
-#   when: rbenv_exists is failed
 
 - name: Install ruby-build
   git:
     repo: https://github.com/sstephenson/ruby-build.git
     dest: /home/ec2-user/.rbenv/plugins/ruby-build
-#   when: rbenv_exists is failed
 
 - name: Check ruby installed
   shell: bash -lc "rbenv versions | grep {{ ruby_version }}"
@@ -68,7 +64,6 @@
 
 - name: Set default Ruby version
   shell: bash -lc "rbenv global {{ ruby_version }} && rbenv rehash"
-#   when: rbenv_exists is failed
 
 - name: Install bundler and so on
   shell: bash -lc "gem install {{ item }}"
@@ -76,4 +71,3 @@
     - rbenv-rehash
     - bundler -v '{{ bundler_version }}'
     - rails -v '{{ rails_version }}'
-#   when: rbenv_exists is failed

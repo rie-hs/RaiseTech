@@ -17,8 +17,6 @@
 
 - name: Source .bash_profile if nvm is not detected
   shell: source ~/.bash_profile
-# args:
-#     executable: /bin/bash
   when: nvm_check_command is failed
 
 - name: Install node

@@ -1,9 +1,4 @@
 ---
-#- name: setup app
-#  shell: bash -lc "bin/setup"
-#  args:
-#    chdir: "{{ app_dir }}"
-
 - name: Configure development.rb.j2
   template:
     src: development.rb.j2 # コピー元のファイルパス
@@ -11,8 +6,8 @@
 
 - name: Set S3
   template:
-    src: storage.yml.j2  # コピー元のファイルパス
-    dest: "{{ app_dir }}/config/storage.yml" # コピー先のパス
+    src: storage.yml.j2
+    dest: "{{ app_dir }}/config/storage.yml"
 
 - name: Precompile application assets
   shell: bash -lc "rails assets:precompile"

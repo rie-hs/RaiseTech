@@ -1,6 +1,0 @@
----
-- name: Update all packages
-  become: yes
-  yum: 
-    name: "*" 
-    state: latest

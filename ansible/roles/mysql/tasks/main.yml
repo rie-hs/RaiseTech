@@ -1,5 +1,5 @@
 ---
-- name: Remove MariaDB ## mariadbがある場合を想定して先に削除
+- name: Remove MariaDB # mariadbがある場合を想定して先に削除
   become: yes
   yum:
     name: "{{ item }}" 
@@ -17,7 +17,6 @@
 - name: Download mysql rpm
   become: yes
   shell: wget https://dev.mysql.com/get/mysql80-community-release-el7-11.noarch.rpm
-  # shell: curl -O https://dev.mysql.com/get/mysql80-community-release-el7-11.noarch.rpm
   args:
     creates: /home/ec2-user/mysql80-community-release-el7-11.noarch.rpm
 
@@ -39,9 +38,3 @@
   template:
     src: database.yml.j2 # コピー元のファイルパス
     dest: "{{ app_dir }}/config/database.yml" # コピー先のパス
-
-# - name: Start MySQL
-#  become: yes
-#  service:
-#    name: mysqld
-#    enabled: yes

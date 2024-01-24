@@ -1,15 +1,6 @@
 ---
 - hosts: ansible_client
   remote_user: ec2-user
-#   become: true
-  tasks:
-#   - name: Ping Connection
-#    ansible.builtin.ping:
-  
-#   - name: Install git
-#     ansible.builtin.yum:
-#       name: git
-#       state: present
 
   vars: 
     app_dir: /home/ec2-user/raisetech-live8-sample-app
@@ -19,7 +10,6 @@
     node_version: 17.9.1
 
   roles:
-    # - yum-update
     - rbenv
     - node
     - app-clone
