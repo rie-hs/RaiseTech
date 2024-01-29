@@ -43,7 +43,7 @@ jobs:
           # inventory: ansible/inventory
           playbook: ansible/playbook.yml
           # private-key: ~/.ssh/RaiseTech-lecture13-KeyPair.pem
-          # playbook-options: '-i ansible/inventory --private-key ~/.ssh/RaiseTech-lecture13-KeyPair.pem'
+          playbook-options: '-i ansible/inventory --private-key ~/.ssh/RaiseTech-lecture13-KeyPair.pem'
 
 workflows:
   raisetech:
