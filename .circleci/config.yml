@@ -40,10 +40,8 @@ jobs:
           fingerprints:
             - SHA256:+hR6Ndo03rflwFLDW2fjpP3BcbWykJUc0MjkQGOtKBU
       - ansible-playbook/playbook:
-          # inventory: ansible/inventory
           playbook: ansible/playbook.yml
-          # private-key: ~/.ssh/RaiseTech-lecture13-KeyPair.pem
-          playbook-options: '-i ansible/inventory --private-key ~/.ssh/RaiseTech-lecture13-KeyPair.pem'
+          playbook-options: '--private-key ~/.ssh/RaiseTech-lecture13-KeyPair.pem -i ansible/inventory '
 
 workflows:
   raisetech:
