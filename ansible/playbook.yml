@@ -1,5 +1,5 @@
 ---
-- hosts: ansible_client
+- hosts: 18.183.73.170
   remote_user: ec2-user
 
   vars: 
