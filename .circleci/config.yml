@@ -42,7 +42,6 @@ jobs:
       - run:
           name: access TG-node
           command: |
-            chmod 600 .circleci/.ssh/RaiseTech-lecture13-KeyPair.pem
             ssh -i ".circleci/.ssh/RaiseTech-lecture13-KeyPair.pem" -o StrictHostKeyChecking=no -p 22 ec2-user@54.64.171.209
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
