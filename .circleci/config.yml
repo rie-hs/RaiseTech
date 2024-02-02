@@ -49,11 +49,10 @@ jobs:
           command: |
             pwd
             ls -la ~/.ssh
-#      - run:
-#          name: access TG-node
-#          command: |
-#            chmod 400 ".circleci/.ssh/RaiseTech-lecture13-KeyPair.pem"
-#            ssh -i ".circleci/.ssh/RaiseTech-lecture13-KeyPair.pem" -o StrictHostKeyChecking=no -p 22 ec2-user@54.64.171.209
+      - run:
+          name: access TG-node
+          command: |
+            ssh -i "~/.ssh/id_rsa" -o StrictHostKeyChecking=no -p 22 ec2-user@54.64.171.209
 #      - ansible-playbook/playbook:
 #          playbook: ansible/playbook.yml
 #          playbook-options: --private-key .circleci/.ssh/RaiseTech-lecture13-KeyPair.pem -i ansible/inventory -e "ansible_cfg_path=ansible/ansible.cfg -u ec2-user" -vvv
