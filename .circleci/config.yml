@@ -40,8 +40,7 @@ jobs:
           name: check path
           command: |
             pwd
-            ls -la .ssh
-            ls -la ~.ssh
+            ls -la ~/.ssh
       - add_ssh_keys:
           fingerprints:
             - SHA256:+hR6Ndo03rflwFLDW2fjpP3BcbWykJUc0MjkQGOtKBU
@@ -49,7 +48,6 @@ jobs:
           name: check key
           command: |
             pwd
-            ls -la .ssh
             ls -la ~.ssh
 #      - run:
 #          name: access TG-node
