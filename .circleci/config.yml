@@ -34,9 +34,7 @@ jobs:
     executor: ansible-playbook/default
     steps:
       - checkout
-      - add_ssh_keys:
-          fingerprints:
-            - "SHA256:+hR6Ndo03rflwFLDW2fjpP3BcbWykJUc0MjkQGOtKBU"
+
 #      - ansible-playbook/install:
 #          version: 2.10.7
 #      - run:
@@ -44,12 +42,14 @@ jobs:
 #          command: |
 #            pwd
 #            ls -la ~/.ssh
-#      
-#      - run:
-#          name: check key
-#          command: |
-#            pwd
-#            ls -la ~/.ssh
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:xkKPs9zw43wqifa6k8pVF45DEv/cYXQQIO8WJrS06Y4"   
+      - run:
+          name: check key
+          command: |
+            pwd
+            ls -la ~/.ssh
 #      - run:
 #          name: access TG-node
 #          command: |
@@ -57,6 +57,7 @@ jobs:
 #      - ansible-playbook/playbook:
 #          playbook: ansible/playbook.yml
 #          playbook-options: --private-key .circleci/.ssh/RaiseTech-lecture13-KeyPair.pem -i ansible/inventory -e "ansible_cfg_path=ansible/ansible.cfg -u ec2-user" -vvv
+
 
 workflows:
   raisetech:

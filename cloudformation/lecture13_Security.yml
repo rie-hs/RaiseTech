@@ -22,7 +22,7 @@ Resources:
         - IpProtocol: tcp
           FromPort: 22
           ToPort: 22
-          CidrIp: !Ref MyIP
+          CidrIp: 0.0.0.0/0 # !Ref MyIP 課題用に変更
         - IpProtocol: tcp
           FromPort: 80
           ToPort: 80
