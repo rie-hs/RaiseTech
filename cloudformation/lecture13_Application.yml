@@ -10,7 +10,7 @@ Parameters:
   KeyPair:
     Type: AWS::EC2::KeyPair::KeyName
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
-    Default: id_ed25519 # RaiseTech-lecture13-KeyPair   CircleCIでSSH接続させるためにSSHキーを新規作成しKeyPairを変更
+    Default: RaiseTech-lecture13-KeyPair
 
   EC2ImageID:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
