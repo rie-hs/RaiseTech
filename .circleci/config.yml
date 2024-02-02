@@ -58,7 +58,7 @@ jobs:
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
           # playbook-options: -i ansible/inventory --private-key ~/.ssh/id_rsa_6e5733c6485305f8befa722a167f3c51 -o StrictHostKeyChecking=no -vvv
-          # playbook-options: -i ansible/inventory StrictHostKeyChecking=no -vvv
+          playbook-options: -i ansible/inventory
 
 workflows:
   raisetech:
