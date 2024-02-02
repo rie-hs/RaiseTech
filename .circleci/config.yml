@@ -34,13 +34,8 @@ jobs:
     executor: ansible-playbook/default
     steps:
       - checkout
-#      - ansible-playbook/install:
-#          version: 2.10.7
-      - run:
-          name: check path
-          command: |
-            pwd
-#            ls -la ~/.ssh
+      - ansible-playbook/install:
+          version: 2.10.7
       - add_ssh_keys:
           fingerprints:
             - "SHA256:xkKPs9zw43wqifa6k8pVF45DEv/cYXQQIO8WJrS06Y4"   
@@ -48,13 +43,13 @@ jobs:
           name: check key
           command: |
             ls -la ~/.ssh
-      - run:
-          name: access TG-node
-          command: |
-            ssh -i ~/.ssh/id_rsa_6e5733c6485305f8befa722a167f3c51 -o StrictHostKeyChecking=no -p 22 ec2-user@13.115.115.50
-#      - ansible-playbook/playbook:
-#          playbook: ansible/playbook.yml
-#          playbook-options: --private-key .circleci/.ssh/RaiseTech-lecture13-KeyPair.pem -i ansible/inventory -e "ansible_cfg_path=ansible/ansible.cfg -u ec2-user" -vvv
+#      - run:
+#          name: access TG-node
+#          command: |
+#           ssh -i ~/.ssh/id_rsa_6e5733c6485305f8befa722a167f3c51 -o StrictHostKeyChecking=no -p 22 ec2-user@13.115.115.50
+      - ansible-playbook/playbook:
+          playbook: ansible/playbook.yml
+          playbook-options: -i ansible/inventory -e "ansible_cfg_path=ansible/ansible.cfg" -vvv
 
 
 workflows:
