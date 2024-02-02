@@ -34,6 +34,9 @@ jobs:
     executor: ansible-playbook/default
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "${KEY_FINGERPRINT}"
       - ansible-playbook/install:
           version: 2.10.7
       - run:
@@ -41,9 +44,7 @@ jobs:
           command: |
             pwd
             ls -la ~/.ssh
-      - add_ssh_keys:
-          fingerprints:
-            - SHA256:+hR6Ndo03rflwFLDW2fjpP3BcbWykJUc0MjkQGOtKBU
+      
       - run:
           name: check key
           command: |
@@ -52,7 +53,7 @@ jobs:
       - run:
           name: access TG-node
           command: |
-            ssh -i "~/.ssh/id_rsa" -o StrictHostKeyChecking=no -p 22 ec2-user@54.64.171.209
+            ssh -i -o StrictHostKeyChecking=no -p 22 ec2-user@54.64.171.209
 #      - ansible-playbook/playbook:
 #          playbook: ansible/playbook.yml
 #          playbook-options: --private-key .circleci/.ssh/RaiseTech-lecture13-KeyPair.pem -i ansible/inventory -e "ansible_cfg_path=ansible/ansible.cfg -u ec2-user" -vvv
