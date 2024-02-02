@@ -41,7 +41,7 @@ jobs:
           name: check path
           command: |
             pwd
-            ls -la ~/.ssh
+#            ls -la ~/.ssh
       - add_ssh_keys:
           fingerprints:
             - "SHA256:xkKPs9zw43wqifa6k8pVF45DEv/cYXQQIO8WJrS06Y4"   
