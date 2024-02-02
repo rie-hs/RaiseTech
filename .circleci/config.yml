@@ -48,7 +48,7 @@ jobs:
           name: check key
           command: |
             pwd
-            ls -la ~.ssh
+            ls -la ~/.ssh
 #      - run:
 #          name: access TG-node
 #          command: |
