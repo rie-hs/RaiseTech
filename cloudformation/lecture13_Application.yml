@@ -10,7 +10,7 @@ Parameters:
   KeyPair:
     Type: AWS::EC2::KeyPair::KeyName
     Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
-    Default: RaiseTech-lecture13-KeyPair
+    Default: id_ed25519 #RaiseTech-lecture13-KeyPair 課題用に変更
 
   EC2ImageID:
     Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
