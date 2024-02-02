@@ -47,9 +47,14 @@ jobs:
           name: check ansible_cfg_path
           command: |
             ansible --version
+      - run:
+          name: Check Ansible Version
+          command: ansible --version
+          environment:
+            ANSIBLE_CONFIG:  ansible/ansible.cfg
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
-          playbook-options: -i ansible/inventory --config=ansible/ansible.cfg -o StrictHostKeyChecking=no -vvv
+          playbook-options: -i ansible/inventory -o StrictHostKeyChecking=no -vvv
 
 workflows:
   raisetech:
