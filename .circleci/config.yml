@@ -47,10 +47,9 @@ jobs:
           name: check ansible_cfg_path
           command: |
             ansible --version
-#      - ansible-playbook/playbook:
-#          playbook: ansible/playbook.yml
-#          playbook-options: -i ansible/inventory -e "ansible_cfg_path=ansible/ansible.cfg" o StrictHostKeyChecking=no -vvv
-
+      - ansible-playbook/playbook:
+          playbook: ansible/playbook.yml
+          playbook-options: -i ansible/inventory --config=ansible/ansible.cfg -o StrictHostKeyChecking=no -vvv
 
 workflows:
   raisetech:
