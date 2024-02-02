@@ -36,24 +36,24 @@ jobs:
       - checkout
       - add_ssh_keys:
           fingerprints:
-            - "${KEY_FINGERPRINT}"
-      - ansible-playbook/install:
-          version: 2.10.7
-      - run:
-          name: check path
-          command: |
-            pwd
-            ls -la ~/.ssh
-      
-      - run:
-          name: check key
-          command: |
-            pwd
-            ls -la ~/.ssh
-      - run:
-          name: access TG-node
-          command: |
-            ssh -i -o StrictHostKeyChecking=no -p 22 ec2-user@54.64.171.209
+            - "SHA256:xkKPs9zw43wqifa6k8pVF45DEv/cYXQQIO8WJrS06Y4"
+#      - ansible-playbook/install:
+#          version: 2.10.7
+#      - run:
+#          name: check path
+#          command: |
+#            pwd
+#            ls -la ~/.ssh
+#      
+#      - run:
+#          name: check key
+#          command: |
+#            pwd
+#            ls -la ~/.ssh
+#      - run:
+#          name: access TG-node
+#          command: |
+#            ssh -i -o StrictHostKeyChecking=no -p 22 ec2-user@54.64.171.209
 #      - ansible-playbook/playbook:
 #          playbook: ansible/playbook.yml
 #          playbook-options: --private-key .circleci/.ssh/RaiseTech-lecture13-KeyPair.pem -i ansible/inventory -e "ansible_cfg_path=ansible/ansible.cfg -u ec2-user" -vvv
