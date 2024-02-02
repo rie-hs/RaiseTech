@@ -34,7 +34,6 @@ jobs:
     executor: ansible-playbook/default
     steps:
       - checkout
-
 #      - ansible-playbook/install:
 #          version: 2.10.7
       - run:
@@ -48,7 +47,6 @@ jobs:
       - run:
           name: check key
           command: |
-            pwd
             ls -la ~/.ssh
 #      - run:
 #          name: access TG-node
