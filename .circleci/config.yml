@@ -48,14 +48,14 @@ jobs:
           command: |
             ansible --version
       - run:
-          name: Check Ansible Version
+          name: check nsible version and set config file
           command: ansible --version
           environment:
             ANSIBLE_CONFIG:  ansible/ansible.cfg
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
           #playbook-options: -i ansible/inventory --private-key ~/.ssh/id_rsa_6e5733c6485305f8befa722a167f3c51 -o StrictHostKeyChecking=no -vvv
-          playbook-options: -i ansible/inventory
+          playbook-options: -i ansible/inventory StrictHostKeyChecking=no -vvv
 
 workflows:
   raisetech:
