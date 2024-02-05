@@ -71,7 +71,3 @@
     - rbenv-rehash
     - bundler -v '{{ bundler_version }}'
     - rails -v '{{ rails_version }}'
-
-- name: 
-  become: yes
-  ansible.builtin.reboot:
