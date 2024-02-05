@@ -22,7 +22,6 @@
 
 - name: Run bin/rails db:create
   become: yes
-  command: bin/rails db:create
   shell: bash -lc "bin/rails db:create"
   args:
     chdir: "{{ app_dir }}"
