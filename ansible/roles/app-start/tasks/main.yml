@@ -27,10 +27,11 @@
     state: restarted
 
 - name: Run bin/rails db:create
-  become: yes
-  shell: bash -lc "bin/rails db:create"
-  args:
-    chdir: "{{ app_dir }}"
+#  become: yes
+#  shell: bash -lc "bin/rails db:create"
+  shell: which ruby
+#  args:
+#    chdir: "{{ app_dir }}"
 
 - name: Start unicorn
   shell: bash -lc "bundle exec unicorn_rails -c config/unicorn.rb -E development -D"
