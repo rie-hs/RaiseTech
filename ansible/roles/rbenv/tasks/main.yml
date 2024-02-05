@@ -3,24 +3,41 @@
 - name: Install ruby package
   become: yes
   yum:
-    name: "{{ item }}" 
+#    name: "{{ item }}" 
+#    state: present
+#  with_items:
+#    - git
+#    - make
+#    - gcc-c++
+#    - patch
+#    - openssl-devel
+#    - libyaml-devel
+#    - libffi-devel
+#    - libicu-devel
+#   - libxml2
+#    - libxslt
+#    - libxml2-devel
+#    - libxslt-devel
+#    - zlib-devel
+#    - readline-devel
+#    - ImageMagick-devel
     state: present
-  with_items:
-    - git
-    - make
-    - gcc-c++
-    - patch
-    - openssl-devel
-    - libyaml-devel
-    - libffi-devel
-    - libicu-devel
-    - libxml2
-    - libxslt
-    - libxml2-devel
-    - libxslt-devel
-    - zlib-devel
-    - readline-devel
-    - ImageMagick-devel
+    name: 
+      - git
+      - make
+      - gcc-c++
+      - patch
+      - openssl-devel
+      - libyaml-devel
+      - libffi-devel
+      - libicu-devel
+      - libxml2
+      - libxslt
+      - libxml2-devel
+      - libxslt-devel
+      - zlib-devel
+      - readline-devel
+      - ImageMagick-devel
 
 - name: check rbenv install # rubyのバージョン管理ツールであるrbenvがインストールされているか確認
   shell: bash -lc "rbenv --version"
