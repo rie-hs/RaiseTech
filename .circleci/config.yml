@@ -43,6 +43,7 @@ jobs:
           name: check key
           command: |
             ls -la ~/.ssh
+            cat ~/.ssh/config
       - run:
           name: check ansible_cfg_path
           command: |
