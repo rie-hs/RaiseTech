@@ -14,24 +14,16 @@
   args:
     chdir: "{{ app_dir }}"
 
-#- name: Run bin/setup
-#  become: yes
-#  shell: bash -lc "bin/setup"
-#  args:
-#    chdir: "{{ app_dir }}"
+- name: Run bin/setup
+  shell: bash -lc "bin/setup"
+  args:
+    chdir: "{{ app_dir }}"
 
 - name: Restart nginx
   become: yes
   service:
     name: nginx
     state: restarted
-
-- name: Run bin/rails db:create
-#  become: yes
-#  shell: bash -lc "bin/rails db:create"
-  shell: which ruby
-#  args:
-#    chdir: "{{ app_dir }}"
 
 - name: Start unicorn
   shell: bash -lc "bundle exec unicorn_rails -c config/unicorn.rb -E development -D"

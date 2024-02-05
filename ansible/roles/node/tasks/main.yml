@@ -26,6 +26,6 @@
 - name: Install yarn
   shell: bash -lc "npm install --global yarn"
 
-- name: 
-  become: yes
-  ansible.builtin.reboot:
+#- name: 
+#  become: yes
+#  ansible.builtin.reboot:
