@@ -30,7 +30,7 @@
   become: yes
   shell: bash -lc "bin/rails db:create"
   args:
-  chdir: "{{ app_dir }}"
+    chdir: "{{ app_dir }}"
 
 - name: Start unicorn
   shell: bash -lc "bundle exec unicorn_rails -c config/unicorn.rb -E development -D"
