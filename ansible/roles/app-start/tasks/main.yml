@@ -16,7 +16,7 @@
 
 - name: Run bin/setup
   become: yes
-  shell: bash -lc "bin/setup"
+  shell: bash -lc "~/.rbenv/shims/ruby bin/setup"
   args:
     chdir: "{{ app_dir }}"
 
