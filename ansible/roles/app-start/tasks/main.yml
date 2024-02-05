@@ -1,5 +1,5 @@
 ---
-- name: Configure development.rb.j2
+- name: Configure development.rb
   template:
     src: development.rb.j2 # コピー元のファイルパス
     dest: "{{ app_dir }}/config/environments/development.rb" # コピー先のパス
@@ -20,7 +20,15 @@
     name: nginx
     state: restarted
 
+- name: Run bin/rails db:create
+  become: yes
+  command: bin/rails db:create
+  shell: bash -lc "bin/rails db:create"
+  args:
+    chdir: "{{ app_dir }}"
+
 - name: Start unicorn
   shell: bash -lc "bundle exec unicorn_rails -c config/unicorn.rb -E development -D"
   args:
     chdir: "{{ app_dir }}"
+  ignore_errors: true
