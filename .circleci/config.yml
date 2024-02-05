@@ -45,6 +45,11 @@ jobs:
             ls -la ~/.ssh
             cat ~/.ssh/config
       - run:
+          name: Add StrictHostKeyChecking no to ~/.ssh/config
+          command: |
+            echo -e "Host *\n  StrictHostKeyChecking no" >> ~/.ssh/config
+            cat ~/.ssh/config
+      - run:
           name: check ansible_cfg_path
           command: |
             ansible --version
