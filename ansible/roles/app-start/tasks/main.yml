@@ -14,11 +14,11 @@
   args:
     chdir: "{{ app_dir }}"
 
-- name: Run bin/setup
-  become: yes
-  shell: bash -lc "~/.rbenv/shims/ruby bin/setup"
-  args:
-    chdir: "{{ app_dir }}"
+#- name: Run bin/setup
+#  become: yes
+#  shell: bash -lc "bin/setup"
+#  args:
+#    chdir: "{{ app_dir }}"
 
 - name: Restart nginx
   become: yes
@@ -26,11 +26,11 @@
     name: nginx
     state: restarted
 
-#- name: Run bin/rails db:create
-#  become: yes
-#  shell: bash -lc "bin/rails db:create"
+- name: Run bin/rails db:create
+  become: yes
+  shell: bash -lc "bin/rails db:create"
 #  args:
-#   chdir: "{{ app_dir }}"
+#  chdir: "{{ app_dir }}"
 
 - name: Start unicorn
   shell: bash -lc "bundle exec unicorn_rails -c config/unicorn.rb -E development -D"
