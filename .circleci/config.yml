@@ -57,10 +57,6 @@ jobs:
             echo "AWS_ALB_DNS_NAME: $AWS_ALB_DNS_NAME" 
             echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
 
-#      - run:
-#          command: |
-#            echo "export AWS_EC2_PUBLIC_IP='$(ruby app.rb)'" >> $BASH_ENV
-
   execute ansible:
     executor: ansible-playbook/default
     steps:
@@ -80,18 +76,18 @@ jobs:
           command: |
             echo -e "Host *\n  StrictHostKeyChecking no" >> ~/.ssh/config
             cat ~/.ssh/config
-      - run:
-          name: check ansible_cfg_path
-          command: |
-            ansible --version
-      - run:
-          name: check ansible version and set config file
-          command: ansible --version
-          environment:
-            ANSIBLE_CONFIG:  ansible/ansible.cfg
-      - run:
-          name: check config file
-          command: cat ~/project/ansible/ansible.cfg
+#      - run:
+#          name: check ansible_cfg_path
+#          command: |
+#            ansible --version
+#      - run:
+#          name: check ansible version and set config file
+#          command: ansible --version
+#          environment:
+#            ANSIBLE_CONFIG:  ansible/ansible.cfg
+#      - run:
+#          name: check config file
+#          command: cat ~/project/ansible/ansible.cfg
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
           # playbook-options: -i ansible/inventory --private-key ~/.ssh/id_rsa_6e5733c6485305f8befa722a167f3c51 -o StrictHostKeyChecking=no -vvv
@@ -104,6 +100,6 @@ workflows:
       - deploy cloudformation:
           requires:
             - cfn-lint
-#      - execute ansible:
-#          requires:
-#            - deploy cloudformation
+      - execute ansible:
+          requires:
+            - deploy cloudformation

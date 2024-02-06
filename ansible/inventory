@@ -1,2 +1,2 @@
 [ansible_client]
-13.115.115.50
+{{ lookup('env', 'AWS_EC2_PUBLIC_IP') }}

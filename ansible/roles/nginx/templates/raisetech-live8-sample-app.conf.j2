@@ -4,7 +4,7 @@ upstream unicorn {
 
 server {
   listen 80;
-  server_name 43.206.214.65;
+  server_name {{ lookup('env', 'AWS_EC2_PUBLIC_IP') }};
   root /home/ec2-user/raisetech-live8-sample-app/public;
 
   location ^~ /assets/ {
