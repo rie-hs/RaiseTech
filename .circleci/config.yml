@@ -29,6 +29,17 @@ jobs:
             aws cloudformation deploy --template-file cloudformation/lecture13_Network.yml --stack-name lecture13-Network
             aws cloudformation deploy --template-file cloudformation/lecture13_Security.yml --stack-name lecture13-Security --parameter-overrides MyIP=$MY_IP --capabilities CAPABILITY_IAM
             aws cloudformation deploy --template-file cloudformation/lecture13_Application.yml --stack-name lecture13-Application
+            - run:
+          name: Set Environment Variables
+          command: |
+            AWS_EC2_PUBLIC_IP=$(aws cloudformation describe-stacks \
+              --stack-name lecture13-Application \
+              --query "Stacks[0].Outputs[?OutputKey=='EC2PublicIp'].OutputValue" \
+              --output text)
+            echo "AWS_EC2_PUBLIC_IP: $AWS_EC2_PUBLIC_IP"
+#      - run:
+#          command: |
+#            echo "export AWS_EC2_PUBLIC_IP='$(ruby app.rb)'" >> $BASH_ENV
 
   execute ansible:
     executor: ansible-playbook/default
@@ -65,7 +76,6 @@ jobs:
           playbook: ansible/playbook.yml
           # playbook-options: -i ansible/inventory --private-key ~/.ssh/id_rsa_6e5733c6485305f8befa722a167f3c51 -o StrictHostKeyChecking=no -vvv
           playbook-options: -i ansible/inventory -vvv
-
 
 workflows:
   raisetech:
