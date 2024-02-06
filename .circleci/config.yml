@@ -29,7 +29,6 @@ jobs:
             aws cloudformation deploy --template-file cloudformation/lecture13_Network.yml --stack-name lecture13-Network
             aws cloudformation deploy --template-file cloudformation/lecture13_Security.yml --stack-name lecture13-Security --parameter-overrides MyIP=$MY_IP --capabilities CAPABILITY_IAM
             aws cloudformation deploy --template-file cloudformation/lecture13_Application.yml --stack-name lecture13-Application
-            - run:
       - run:
           name: Set Environment Variables
           command: |
