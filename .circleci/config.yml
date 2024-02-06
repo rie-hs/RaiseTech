@@ -37,6 +37,7 @@ jobs:
               --query "Stacks[0].Outputs[?OutputKey=='EC2PublicIp'].OutputValue" \
               --output text)
             echo "AWS_EC2_PUBLIC_IP: $AWS_EC2_PUBLIC_IP"
+            echo 'export AWS_EC2_PUBLIC_IP="$AWS_EC2_PUBLIC_IP"' >> "$BASH_ENV"
 #      - run:
 #          command: |
 #            echo "export AWS_EC2_PUBLIC_IP='$(ruby app.rb)'" >> $BASH_ENV
