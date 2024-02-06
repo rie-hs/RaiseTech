@@ -30,14 +30,33 @@ jobs:
             aws cloudformation deploy --template-file cloudformation/lecture13_Security.yml --stack-name lecture13-Security --parameter-overrides MyIP=$MY_IP --capabilities CAPABILITY_IAM
             aws cloudformation deploy --template-file cloudformation/lecture13_Application.yml --stack-name lecture13-Application
       - run:
-          name: Set Environment Variables
+          name: Set Environment Variables of EC2 public IP
           command: |
             AWS_EC2_PUBLIC_IP=$(aws cloudformation describe-stacks \
               --stack-name lecture13-Application \
               --query "Stacks[0].Outputs[?OutputKey=='EC2PublicIp'].OutputValue" \
               --output text)
-            echo "AWS_EC2_PUBLIC_IP: $AWS_EC2_PUBLIC_IP"
+            echo "AWS_EC2_PUBLIC_IP: $AWS_EC2_PUBLIC_IP" 
             echo 'export AWS_EC2_PUBLIC_IP="$AWS_EC2_PUBLIC_IP"' >> "$BASH_ENV"
+      - run:
+          name: Set Environment Variables of RDS endpoint
+          command: |
+            AWS_RDS_ENDPOINT=$(aws cloudformation describe-stacks \
+              --stack-name lecture13-Application \
+              --query "Stacks[0].Outputs[?OutputKey=='RDSInstanceEndpoint'].OutputValue" \
+              --output text)
+            echo "AWS_RDS_ENDPOINT: $AWS_RDS_ENDPOINT" 
+            echo 'export AWS_RDS_ENDPOINT="$AWS_RDS_ENDPOINT"' >> "$BASH_ENV"
+      - run:
+          name: Set Environment Variables of ALB DNS name
+          command: |
+            AWS_ALB_DNS_NAME=$(aws cloudformation describe-stacks \
+              --stack-name lecture13-Application \
+              --query "Stacks[0].Outputs[?OutputKey=='ALBDNSName'].OutputValue" \
+              --output text)
+            echo "AWS_ALB_NAME: $AWS_ALB_NAME" 
+            echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
+
 #      - run:
 #          command: |
 #            echo "export AWS_EC2_PUBLIC_IP='$(ruby app.rb)'" >> $BASH_ENV
