@@ -160,3 +160,19 @@ Resources:
             Principal: "*"
             Action: "s3:*"
             Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
+
+Outputs:
+  EC2PublicIp:
+    Value: !GetAtt EC2.PublicIp
+    Export:
+      Name: !Sub ${NameBase}-EC2-PublicIp
+
+  RDSInstanceEndpoint:
+    Value: !GetAtt RDS.Endpoint.Address
+    Export:
+      Name: !Sub ${NameBase}-RDS-Endpoint
+
+  ALBDNSName:
+    Value: !GetAtt ALB.DNSName
+    Export:
+      Name: !Sub ${NameBase}-ALB-DNSName
