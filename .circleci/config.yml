@@ -91,7 +91,7 @@ jobs:
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
           # playbook-options: -i ansible/inventory --private-key ~/.ssh/id_rsa_6e5733c6485305f8befa722a167f3c51 -o StrictHostKeyChecking=no -vvv
-          playbook-options: -i ansible/inventory -vvv
+          playbook-options: -i ansible/inventory
 
 workflows:
   raisetech:
@@ -100,6 +100,6 @@ workflows:
       - deploy cloudformation:
           requires:
             - cfn-lint
-      - execute ansible:
-          requires:
-            - deploy cloudformation
+#      - execute ansible:
+#          requires:
+#            - deploy cloudformation
