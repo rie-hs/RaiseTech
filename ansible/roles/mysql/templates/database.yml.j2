@@ -16,9 +16,6 @@ default: &default
   username: "{{ lookup('env', 'AWS_DB_USERNAME') }}"
   password: "{{ lookup('env', 'AWS_DB_PASSWORD') }}"
   host: "{{ lookup('env', 'AWS_RDS_ENDPOINT') }}"
-#  username: admin
-#  password: RDSpassword1
-#  host: lecture13-application-rds-rltwsiccjdx7.cjqv5eselchf.ap-northeast-1.rds.amazonaws.com
 
 development:
   <<: *default
