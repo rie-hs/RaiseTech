@@ -142,10 +142,10 @@ Resources:
     Type: AWS::S3::Bucket
     Properties: 
       PublicAccessBlockConfiguration:
-        BlockPublicAcls: True
-        BlockPublicPolicy: True
-        IgnorePublicAcls: True
-        RestrictPublicBuckets: True
+        BlockPublicAcls: False
+        BlockPublicPolicy: False
+        IgnorePublicAcls: False
+        RestrictPublicBuckets: False
       BucketName: raisetech-lecture13-s3 # バケット名は大文字使用不可
 
 # S3バケットポリシーの設定
@@ -156,7 +156,7 @@ Resources:
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
-          - Effect: Allow # Deny 課題用に変更
+          - Effect: Deny
             Principal: "*"
             Action: "s3:*"
             Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
