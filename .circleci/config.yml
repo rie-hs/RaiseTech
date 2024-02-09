@@ -94,17 +94,17 @@ jobs:
           # playbook-options: -i ansible/inventory --private-key ~/.ssh/id_rsa_6e5733c6485305f8befa722a167f3c51 -o StrictHostKeyChecking=no -vvv
           playbook-options: -i ansible/inventory
 
-  execute-serverspec:
-    executor: ruby/default
-    steps:
-      - checkout
-      - ruby/install:
-          version: '3.1.2'
-      - ruby/install-deps:
-          app-dir: serverspec
-      - run:
-          name: 'execute serverspec'
-          
+#  execute-serverspec:
+#    executor: ruby/default
+#    steps:
+#      - checkout
+#      - ruby/install:
+#          version: '3.1.2'
+#      - ruby/install-deps:
+#          app-dir: serverspec
+#      - run:
+#          name: 'execute serverspec'
+
 workflows:
   raisetech:
     jobs:
