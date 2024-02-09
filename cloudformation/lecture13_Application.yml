@@ -156,7 +156,7 @@ Resources:
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
-          - Effect: Deny
+          - Effect: Allow # Deny 課題用に変更
             Principal: "*"
             Action: "s3:*"
             Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
