@@ -67,6 +67,9 @@ jobs:
           root: /home/circleci
           paths:
             - .bashrc
+      - run:
+          name: check /home/circleci/.bashrc
+          command: cat /home/circleci/.bashrc
 
 
   execute ansible:
@@ -94,9 +97,6 @@ jobs:
           command: |
             echo -e "Host *\n  StrictHostKeyChecking no" >> ~/.ssh/config
             cat ~/.ssh/config
-      - run:
-          name: check /bin/bash
-          command: cat /bin/bash
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
           playbook-options: |
