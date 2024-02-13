@@ -9,6 +9,11 @@
     src: storage.yml.j2
     dest: "{{ app_dir }}/config/storage.yml"
 
+- name: bundle install
+  shell: bash -lc "bundle install"
+  args:
+    chdir: "{{ app_dir }}"
+
 - name: Precompile application assets
   shell: bash -lc "rails assets:precompile"
   args:
