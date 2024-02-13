@@ -62,10 +62,16 @@ jobs:
     executor: ansible-playbook/default
     environment:
       AWS_EC2_PUBLIC_IP: $AWS_EC2_PUBLIC_IP
-      AWS_ALB_DNS_NAME: $AWS_ALB_DNS_NAME
       AWS_RDS_ENDPOINT: $AWS_RDS_ENDPOINT
+      AWS_ALB_DNS_NAME: $AWS_ALB_DNS_NAME
     steps:
       - checkout
+      - run:
+          name: Set Environment Variable
+          command: |
+            echo 'export AWS_EC2_PUBLIC_IP="$AWS_EC2_PUBLIC_IP"' >> "$BASH_ENV"
+            echo 'export AWS_RDS_ENDPOINT="$AWS_RDS_ENDPOINT"' >> "$BASH_ENV"
+            echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
       - ansible-playbook/install:
           version: 2.10.7
       - add_ssh_keys:
