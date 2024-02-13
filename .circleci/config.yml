@@ -44,7 +44,7 @@ jobs:
           command: |
             AWS_RDS_ENDPOINT=$(aws cloudformation describe-stacks \
               --stack-name lecture13-Application \
-              --query "Stacks[1].Outputs[?OutputKey=='RDSInstanceEndpoint'].OutputValue" \
+              --query "Stacks[0].Outputs[?OutputKey=='RDSInstanceEndpoint'].OutputValue" \
               --output text)
             echo "AWS_RDS_ENDPOINT: $AWS_RDS_ENDPOINT" 
             echo 'export AWS_RDS_ENDPOINT="$AWS_RDS_ENDPOINT"' >> "$BASH_ENV"
@@ -53,7 +53,7 @@ jobs:
           command: |
             AWS_ALB_DNS_NAME=$(aws cloudformation describe-stacks \
               --stack-name lecture13-Application \
-              --query "Stacks[2].Outputs[?OutputKey=='ALBDNSName'].OutputValue" \
+              --query "Stacks[0].Outputs[?OutputKey=='ALBDNSName'].OutputValue" \
               --output text)
             echo "AWS_ALB_DNS_NAME: $AWS_ALB_DNS_NAME" 
             echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
@@ -94,6 +94,9 @@ jobs:
           command: |
             echo -e "Host *\n  StrictHostKeyChecking no" >> ~/.ssh/config
             cat ~/.ssh/config
+      - run:
+          name: check /bin/bash
+          command: cat /bin/bash
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
           playbook-options: |
