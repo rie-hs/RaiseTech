@@ -156,7 +156,7 @@ Resources:
       PolicyDocument:
         Version: "2012-10-17"
         Statement:
-          - Effect: Deny
+          - Effect: Allow
             Principal: "*"
             Action: "s3:*"
             Resource: !Sub "arn:aws:s3:::${S3Bucket}/*"
