@@ -57,6 +57,9 @@ jobs:
               --output text)
             echo "AWS_ALB_DNS_NAME: $AWS_ALB_DNS_NAME" 
             echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
+      - run:
+          name: check ls -la pwd
+          command: ls -la
       - persist_to_workspace:
           root: .
           paths:
