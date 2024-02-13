@@ -75,10 +75,10 @@ jobs:
       - checkout
       - attach_workspace:
           at: /tmp/workspace
-      - run:
-          name: Set Environment Variable
-          command: |
-            source /workspace/bash_env.sh
+#      - run:
+#          name: Set Environment Variable
+#          command: |
+#            source /workspace/bash_env.sh
       - ansible-playbook/install:
           version: 2.10.7
       - add_ssh_keys:
