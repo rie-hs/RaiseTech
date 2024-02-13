@@ -60,6 +60,10 @@ jobs:
 
   execute ansible:
     executor: ansible-playbook/default
+    environment:
+      AWS_EC2_PUBLIC_IP: $AWS_EC2_PUBLIC_IP
+      AWS_ALB_DNS_NAME: $AWS_ALB_DNS_NAME
+      AWS_RDS_ENDPOINT: $AWS_RDS_ENDPOINT
     steps:
       - checkout
       - ansible-playbook/install:
