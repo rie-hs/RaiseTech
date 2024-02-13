@@ -112,6 +112,6 @@ workflows:
       - deploy cloudformation:
           requires:
             - cfn-lint
-      - execute ansible:
-          requires:
-            - deploy cloudformation
+#      - execute ansible:
+#          requires:
+#            - deploy cloudformation
