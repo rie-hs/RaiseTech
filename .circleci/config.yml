@@ -61,8 +61,8 @@ jobs:
           name: check pwd
           command: pwd
       - run:
-          name: check ls -la /home/circleci/project
-          command: ls -la /home/circleci/project
+          name: check ls -la /home/circleci
+          command: ls -la /home/circleci
       - persist_to_workspace:
           root: .
           paths:
