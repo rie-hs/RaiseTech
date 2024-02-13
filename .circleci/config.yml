@@ -58,9 +58,8 @@ jobs:
             echo "AWS_ALB_DNS_NAME: $AWS_ALB_DNS_NAME" 
             echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
       - persist_to_workspace:
-          root: /
-          paths:
-            - "$BASH_ENV"
+          root: .
+          paths: .
 
   execute ansible:
     executor: ansible-playbook/default
