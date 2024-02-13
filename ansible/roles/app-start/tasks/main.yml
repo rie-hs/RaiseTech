@@ -1,8 +1,8 @@
 ---
 - name: Configure development.rb
   template:
-    src: development.rb.j2 # コピー元のファイルパス
-    dest: "{{ app_dir }}/config/environments/development.rb" # コピー先のパス
+    src: development.rb.j2
+    dest: "{{ app_dir }}/config/environments/development.rb"
 
 - name: Set S3
   template:
