@@ -77,7 +77,7 @@ jobs:
     steps:
       - checkout
       - attach_workspace:
-          at: /tmp/workspace
+          at: /home/circleci
 #      - run:
 #          name: Set Environment Variable
 #          command: |
