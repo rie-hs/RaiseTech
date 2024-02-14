@@ -15,7 +15,7 @@ default: &default
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
   username: "{{ lookup('env','AWS_DB_USERNAME') }}"
   password: "{{ lookup('env','AWS_DB_PASSWORD') }}"
-  host: "{{ lookup('env','AWS_RDS_ENDPOINT') }}"
+  host: {{ AWS_RDS_ENDPOINT }}
 
 development:
   <<: *default
