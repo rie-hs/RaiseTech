@@ -38,7 +38,8 @@ jobs:
               --query "Stacks[0].Outputs[?OutputKey=='EC2PublicIp'].OutputValue" \
               --output text)
             echo "AWS_EC2_PUBLIC_IP: $AWS_EC2_PUBLIC_IP" 
-            echo 'export AWS_EC2_PUBLIC_IP="$AWS_EC2_PUBLIC_IP"' >> "$BASH_ENV"
+            echo "AWS_EC2_PUBLIC_IP=$AWS_EC2_PUBLIC_IP" > /home/circleci/env_var.txt
+#            echo 'export AWS_EC2_PUBLIC_IP="$AWS_EC2_PUBLIC_IP"' >> "$BASH_ENV"
       - run:
           name: Get Environment Variable of RDS endpoint
           command: |
@@ -47,7 +48,8 @@ jobs:
               --query "Stacks[0].Outputs[?OutputKey=='RDSInstanceEndpoint'].OutputValue" \
               --output text)
             echo "AWS_RDS_ENDPOINT: $AWS_RDS_ENDPOINT" 
-            echo 'export AWS_RDS_ENDPOINT="$AWS_RDS_ENDPOINT"' >> "$BASH_ENV"
+            echo "AWS_RDS_ENDPOINT=$AWS_RDS_ENDPOINT" >> /home/circleci/env_var.txt
+#            echo 'export AWS_RDS_ENDPOINT="$AWS_RDS_ENDPOINT"' >> "$BASH_ENV"
       - run:
           name: Get Environment Variable of ALB DNS name
           command: |
@@ -56,10 +58,12 @@ jobs:
               --query "Stacks[0].Outputs[?OutputKey=='ALBDNSName'].OutputValue" \
               --output text)
             echo "AWS_ALB_DNS_NAME: $AWS_ALB_DNS_NAME" 
-            echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
+            echo "AWS_ALB_DNS_NAME=$AWS_ALB_DNS_NAME" >> /home/circleci/env_var.txt
+#            echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
       - persist_to_workspace:
           root: /home/circleci
-#          paths: .bashrc
+          paths: 
+            - env_var.txt
 
   execute ansible:
     executor: ansible-playbook/default
@@ -67,12 +71,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: /home/circleci
-#      - run:
-#          name: Set Environment Variables
-#          command: |
-#            echo 'export AWS_EC2_PUBLIC_IP="$AWS_EC2_PUBLIC_IP"' >> "$BASH_ENV"
-#            echo 'export AWS_RDS_ENDPOINT="$AWS_RDS_ENDPOINT"' >> "$BASH_ENV"
-#            echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
+      - run:
+          name: Set Environment Variables
+          command: |
+            echo 'export AWS_EC2_PUBLIC_IP="$AWS_EC2_PUBLIC_IP"' >> "$BASH_ENV"
+            echo 'export AWS_RDS_ENDPOINT="$AWS_RDS_ENDPOINT"' >> "$BASH_ENV"
+            echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
       - ansible-playbook/install:
           version: 2.10.7
       - add_ssh_keys:
