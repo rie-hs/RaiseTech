@@ -59,7 +59,7 @@ jobs:
             echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
       - persist_to_workspace:
           root: /home/circleci
-          paths: .bashrc
+#          paths: .bashrc
 
   execute ansible:
     executor: ansible-playbook/default
@@ -67,12 +67,12 @@ jobs:
       - checkout
       - attach_workspace:
           at: /home/circleci
-      - run:
-          name: Set Environment Variables
-          command: |
-            echo 'export AWS_EC2_PUBLIC_IP="$AWS_EC2_PUBLIC_IP"' >> "$BASH_ENV"
-            echo 'export AWS_RDS_ENDPOINT="$AWS_RDS_ENDPOINT"' >> "$BASH_ENV"
-            echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
+#      - run:
+#          name: Set Environment Variables
+#          command: |
+#            echo 'export AWS_EC2_PUBLIC_IP="$AWS_EC2_PUBLIC_IP"' >> "$BASH_ENV"
+#            echo 'export AWS_RDS_ENDPOINT="$AWS_RDS_ENDPOINT"' >> "$BASH_ENV"
+#            echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
       - ansible-playbook/install:
           version: 2.10.7
       - add_ssh_keys:
