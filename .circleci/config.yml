@@ -77,7 +77,7 @@ jobs:
       - run:
           name: Set Environment Variables
           command: |
-            echo 'export AWS_EC2_PUBLIC_IP="$grep '^AWS_EC2_PUBLIC_IP=' /home/circleci/env_var.txt | cut -d '=' -f 2-)" >> $BASH_ENV"
+            echo "export AWS_EC2_PUBLIC_IP=$(grep '^AWS_EC2_PUBLIC_IP=' /home/circleci/env_var.txt | cut -d '=' -f 2-)" >> $BASH_ENV
             echo "export AWS_RDS_ENDPOINT=$(grep '^AWS_RDS_ENDPOINT=' /home/circleci/env_var.txt | cut -d '=' -f 2-)" >> $BASH_ENV
             echo "export AWS_ALB_DNS_NAME=$(grep '^AWS_ALB_DNS_NAME=' /home/circleci/env_var.txt | cut -d '=' -f 2-)" >> $BASH_ENV
       - ansible-playbook/install:
