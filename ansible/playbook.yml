@@ -19,5 +19,4 @@
     - app-clone
     - mysql
     - nginx
-#    - unicorn
     - app-start

@@ -39,7 +39,6 @@ jobs:
               --output text)
             echo "AWS_EC2_PUBLIC_IP: $AWS_EC2_PUBLIC_IP" 
             echo "AWS_EC2_PUBLIC_IP=$AWS_EC2_PUBLIC_IP" > /home/circleci/env_var.txt
-#            echo 'export AWS_EC2_PUBLIC_IP="$AWS_EC2_PUBLIC_IP"' >> "$BASH_ENV"
       - run:
           name: Get Environment Variable of RDS endpoint
           command: |
@@ -49,7 +48,6 @@ jobs:
               --output text)
             echo "AWS_RDS_ENDPOINT: $AWS_RDS_ENDPOINT" 
             echo "AWS_RDS_ENDPOINT=$AWS_RDS_ENDPOINT" >> /home/circleci/env_var.txt
-#            echo 'export AWS_RDS_ENDPOINT="$AWS_RDS_ENDPOINT"' >> "$BASH_ENV"
       - run:
           name: Get Environment Variable of ALB DNS name
           command: |
@@ -59,7 +57,6 @@ jobs:
               --output text)
             echo "AWS_ALB_DNS_NAME: $AWS_ALB_DNS_NAME" 
             echo "AWS_ALB_DNS_NAME=$AWS_ALB_DNS_NAME" >> /home/circleci/env_var.txt
-#            echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
       - persist_to_workspace:
           root: /home/circleci
           paths: 
@@ -86,11 +83,6 @@ jobs:
           fingerprints:
             - "SHA256:xkKPs9zw43wqifa6k8pVF45DEv/cYXQQIO8WJrS06Y4"   
       - run:
-          name: check key
-          command: |
-            ls -la ~/.ssh
-            cat ~/.ssh/config
-      - run:
           name: Add StrictHostKeyChecking no to ~/.ssh/config
           command: |
             echo -e "Host *\n  StrictHostKeyChecking no" >> ~/.ssh/config
@@ -109,16 +101,19 @@ jobs:
           playbook: ansible/playbook.yml
           playbook-options: -i ansible/inventory
 
-#  execute-serverspec:
-#    executor: ruby/default
-#    steps:
-#      - checkout
-#      - ruby/install:
-#          version: '3.1.2'
-#      - ruby/install-deps:
-#          app-dir: serverspec
-#      - run:
-#          name: 'execute serverspec'
+  execute serverspec:
+    executor: ruby/default
+    steps:
+      - checkout
+      - ruby/install:
+          version: '3.1.2'
+      - ruby/install-deps:
+          app-dir: serverspec
+      - run:
+          name: 'execute serverspec'
+          command: |
+            cd serverspec
+            bundle exec rspec
 
 workflows:
   raisetech:
@@ -130,3 +125,6 @@ workflows:
       - execute ansible:
           requires:
             - deploy cloudformation
+      - execute serverspec:
+          requires:
+            - execute ansible
