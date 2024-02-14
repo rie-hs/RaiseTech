@@ -1,5 +1,5 @@
 current directory: /Users/rieko/Desktop/RaiseTech_kadai/RaiseTech/serverspec/vendor/bundle/ruby/2.6.0/gems/ed25519-1.3.0/ext/ed25519_ref10
-/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0 -r ./siteconf20240215-13104-162rl1d.rb extconf.rb
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0 -r ./siteconf20240215-14330-1x1dwpr.rb extconf.rb
 creating Makefile
 
 current directory: /Users/rieko/Desktop/RaiseTech_kadai/RaiseTech/serverspec/vendor/bundle/ruby/2.6.0/gems/ed25519-1.3.0/ext/ed25519_ref10
@@ -168,4 +168,4 @@ ld: warning: directory not found for option '-L/AppleInternal/Library/BuildRoots
 
 current directory: /Users/rieko/Desktop/RaiseTech_kadai/RaiseTech/serverspec/vendor/bundle/ruby/2.6.0/gems/ed25519-1.3.0/ext/ed25519_ref10
 make "DESTDIR=" install
-/usr/bin/install -c -m 0755 ed25519_ref10.bundle ./.gem.20240215-13104-1c36c1c
+/usr/bin/install -c -m 0755 ed25519_ref10.bundle ./.gem.20240215-14330-lsbxc9

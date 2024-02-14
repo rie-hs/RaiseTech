@@ -1,5 +1,5 @@
 current directory: /Users/rieko/Desktop/RaiseTech_kadai/RaiseTech/serverspec/vendor/bundle/ruby/2.6.0/gems/bcrypt_pbkdf-1.1.0/ext/mri
-/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0 -r ./siteconf20240215-13104-10anao2.rb extconf.rb
+/System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/bin/ruby -I /System/Library/Frameworks/Ruby.framework/Versions/2.6/usr/lib/ruby/2.6.0 -r ./siteconf20240215-14330-1edafat.rb extconf.rb
 creating Makefile
 
 current directory: /Users/rieko/Desktop/RaiseTech_kadai/RaiseTech/serverspec/vendor/bundle/ruby/2.6.0/gems/bcrypt_pbkdf-1.1.0/ext/mri
@@ -27,4 +27,4 @@ ld: warning: directory not found for option '-L/AppleInternal/Library/BuildRoots
 
 current directory: /Users/rieko/Desktop/RaiseTech_kadai/RaiseTech/serverspec/vendor/bundle/ruby/2.6.0/gems/bcrypt_pbkdf-1.1.0/ext/mri
 make "DESTDIR=" install
-/usr/bin/install -c -m 0755 bcrypt_pbkdf_ext.bundle ./.gem.20240215-13104-1ql3gad
+/usr/bin/install -c -m 0755 bcrypt_pbkdf_ext.bundle ./.gem.20240215-14330-2q4qrc
