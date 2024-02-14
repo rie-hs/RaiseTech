@@ -95,12 +95,10 @@ jobs:
           command: |
             echo -e "Host *\n  StrictHostKeyChecking no" >> ~/.ssh/config
             cat ~/.ssh/config
-#      - run:
-#          name: Generate Inventory File
-#          command: |
-#            AWS_EC2_PUBLIC_IP=$AWS_EC2_PUBLIC_IP
-#            echo "[ansible_client]" > inventory
-#            echo "$AWS_EC2_PUBLIC_IP" >> inventory
+      - run:
+          name: Generate Inventory File
+          command: |
+            echo "$AWS_EC2_PUBLIC_IP" >> ansible/inventory
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
           playbook-options: -i ansible/inventory
