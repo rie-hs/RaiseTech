@@ -32,7 +32,11 @@ jobs:
             aws cloudformation deploy --template-file cloudformation/lecture13_Application.yml --stack-name lecture13-Application
 
   execute ansible:
-    executor: ansible-playbook/default
+#    executor:
+#      ansible-playbook/default
+    docker:
+      - image: circleci/aws-cli 
+      - image: orbss/ansible-playbook@0.0.5
     steps:
       - checkout
       - run:
