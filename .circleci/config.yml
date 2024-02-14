@@ -99,9 +99,9 @@ jobs:
             cat ~/.ssh/config
       - ansible-playbook/playbook:
           playbook: ansible/playbook.yml
-          playbook-options: |
-            -i ansible/inventory
-            --extra-vars "AWS_EC2_PUBLIC_IP=${AWS_EC2_PUBLIC_IP} AWS_RDS_ENDPOINT=${AWS_RDS_ENDPOINT} AWS_ALB_DNS_NAME=${AWS_ALB_DNS_NAME}"
+          playbook-options:
+            - -i ansible/inventory
+            - --extra-vars "AWS_EC2_PUBLIC_IP=${AWS_EC2_PUBLIC_IP} AWS_RDS_ENDPOINT=${AWS_RDS_ENDPOINT} AWS_ALB_DNS_NAME=${AWS_ALB_DNS_NAME}"
 
 #  execute-serverspec:
 #    executor: ruby/default
