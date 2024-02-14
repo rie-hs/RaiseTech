@@ -141,11 +141,11 @@ Resources:
   S3Bucket:
     Type: AWS::S3::Bucket
     Properties: 
-      PublicAccessBlockConfiguration:
-        BlockPublicAcls: True
-        BlockPublicPolicy: True
-        IgnorePublicAcls: True
-        RestrictPublicBuckets: True
+#      PublicAccessBlockConfiguration:
+#        BlockPublicAcls: True
+#        BlockPublicPolicy: True
+#        IgnorePublicAcls: True
+#        RestrictPublicBuckets: True
       BucketName: raisetech-lecture13-s3 # バケット名は大文字使用不可
 
 # S3バケットポリシーの設定
