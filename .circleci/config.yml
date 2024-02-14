@@ -64,6 +64,9 @@ jobs:
           root: /home/circleci
           paths: 
             - env_var.txt
+      - run: 
+          name: check env vars
+          command: cat /home/circleci/env_var.txt
 
   execute ansible:
     executor: ansible-playbook/default
