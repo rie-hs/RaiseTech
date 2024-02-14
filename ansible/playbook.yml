@@ -8,6 +8,10 @@
     bundler_version: 2.3.14
     rails_version: 7.0.4
     node_version: 17.9.1
+    AWS_EC2_PUBLIC_IP: "{{ lookup('env', 'AWS_EC2_PUBLIC_IP') }}"
+    AWS_RDS_ENDPOINT: "{{ lookup('env', 'AWS_RDS_ENDPOINT') }}"
+    AWS_ALB_DNS_NAME: "{{ lookup('env', 'AWS_ALB_DNS_NAME') }}"
+
 
   roles:
     - rbenv

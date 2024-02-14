@@ -30,6 +30,11 @@ jobs:
             aws cloudformation deploy --template-file cloudformation/lecture13_Network.yml --stack-name lecture13-Network
             aws cloudformation deploy --template-file cloudformation/lecture13_Security.yml --stack-name lecture13-Security --parameter-overrides MyIP=$MY_IP --capabilities CAPABILITY_IAM
             aws cloudformation deploy --template-file cloudformation/lecture13_Application.yml --stack-name lecture13-Application
+
+  execute ansible:
+    executor: ansible-playbook/default
+    steps:
+      - checkout
       - run:
           name: Set Environment Variable of EC2 public IP
           command: |
@@ -57,31 +62,6 @@ jobs:
               --output text)
             echo "AWS_ALB_DNS_NAME: $AWS_ALB_DNS_NAME" 
             echo 'export AWS_ALB_DNS_NAME="$AWS_ALB_DNS_NAME"' >> "$BASH_ENV"
-      - run:
-          name: check pwd
-          command: pwd
-      - run:
-          name: check ls -la /home/circleci
-          command: ls -la /home/circleci
-      - persist_to_workspace:
-          root: /home/circleci
-          paths:
-            - .bashrc
-      - run:
-          name: check /home/circleci/.bashrc
-          command: cat /home/circleci/.bashrc
-
-
-  execute ansible:
-    executor: ansible-playbook/default
-    steps:
-      - checkout
-      - attach_workspace:
-          at: /home/circleci
-#      - run:
-#          name: Set Environment Variable
-#          command: |
-#            source /workspace/bash_env.sh
       - ansible-playbook/install:
           version: 2.10.7
       - add_ssh_keys:
