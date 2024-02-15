@@ -14,7 +14,7 @@
 
 
   roles:
-    - rbenv
+    - ruby
     - node
     - app-clone
     - mysql

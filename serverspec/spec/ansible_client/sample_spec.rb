@@ -19,6 +19,7 @@ end
 
 # Railsが指定したバージョンでインストールされているか確認 
 describe command('rails --version') do
+  its(:stdout) { should match /Rails (\d+\.\d+\.\d+)/ }
   its(:stdout) { should match /Rails 7\.0\.4/ }
 end
 
