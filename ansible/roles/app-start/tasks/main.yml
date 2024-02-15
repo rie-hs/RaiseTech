@@ -37,13 +37,13 @@
   ignore_errors: true
 
 - name: check version
-  command: rails --version"
+  command: rails --version
   args:
     chdir: "{{ app_dir }}"
   ignore_errors: true
 
 - name: check version
-  command: ruby --version"
+  command: ruby --version
   args:
     chdir: "{{ app_dir }}"
   ignore_errors: true
