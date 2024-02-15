@@ -17,9 +17,9 @@ describe command('curl http://127.0.0.1:#{listen_port}/_plugin/head/ -o /dev/nul
   its(:stdout) { should match /^200$/ }
 end
 
-# rubyが指定したバージョンでインストールされているか確認 
-describe command('ruby --version') do
-  its(:stdout) { should match /ruby 3\.1\.2p20/ }
+# Railsが指定したバージョンでインストールされているか確認 
+describe command('rails --version') do
+  its(:stdout) { should match /Rails 7\.0\.4/ }
 end
 
 # MySQLのサービスが正常に稼働している
