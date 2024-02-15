@@ -91,7 +91,7 @@ jobs:
           name: Generate inventory file
           command: |
             AWS_EC2_PUBLIC_IP=$AWS_EC2_PUBLIC_IP
-            echo -e "[ansible_client]\$AWS_EC2_PUBLIC_IP" >> ansible/inventory
+            echo -e "[ansible_client]\n$AWS_EC2_PUBLIC_IP" >> ansible/inventory
 #            echo "[ansible_client]" >> ansible/inventory
 #            echo "$AWS_EC2_PUBLIC_IP" >> ansible/inventory
       - run: 
