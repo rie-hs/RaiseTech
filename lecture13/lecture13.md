@@ -9,16 +9,16 @@ CircleCIのWorkflow全体の結果
 ![Workflow](./lecture13-images/13-02_workflow.png)
 
 ## ① CloudFormationのテンプレートを用いてスタックの作成
-**Ansibleのターゲットノードとして設定したいEC2等作成する**
-AWSのコンソール画面よりアクセスキーを作成し、CircleCIに追加する。
+### Ansibleのターゲットノードとして設定したいEC2等作成する
+* AWSのコンソール画面よりアクセスキーを作成し、CircleCIに追加する。
 
-### 使用したテンプレート
+#### 使用したテンプレート
 * [lecture13_Network.yml](../cloudformation/lecture13_Network.yml)
 * [lecture13_Security.yml](../cloudformation/lecture13_Security.yml)
 * [lecture13_Application.yml](../cloudformation/lecture13_Application.yml)
 
 
-### Cloudformationをデプロイするジョブ
+#### Cloudformationをデプロイするジョブ
 ```
   deploy cloudformation:
     executor: aws-cli/default
@@ -35,17 +35,21 @@ AWSのコンソール画面よりアクセスキーを作成し、CircleCIに追
             aws cloudformation deploy --template-file cloudformation/lecture13_Security.yml --stack-name lecture13-Security --parameter-overrides MyIP=$MY_IP --capabilities CAPABILITY_IAM
             aws cloudformation deploy --template-file cloudformation/lecture13_Application.yml --stack-name lecture13-Application
 ```
-### 結果
+#### 結果
 * CircleCIの`deploy cloudformation`の結果
 ![deploy cloudformation](./lecture13-images/13-03_cfn.png)
 
 * スタック作成
+   * ネットワーク関連
 ![ネットワーク](./lecture13-images/13-04_network.png)
+   * セキュリティ関連
 ![セキュリティ](./lecture13-images/13-05_security.png)
+   * アプリケーション関連
 ![アプリケーション](./lecture13-images/13-06_application.png)
 
 ## ② Ansible Playbookの実行
-①で作成したEC2をターゲットノードとし、AnsibleのPlaybookを実行する。Playbookの内容は、第5回課題[第5回課題](../lecture05.md)のサンプルアプリケーションの環境構築〜デプロイとする。
+①で作成したEC2をターゲットノードとし、AnsibleのPlaybookを実行する。
+Playbookの内容は、第5回課題[第5回課題](../lecture05.md)のサンプルアプリケーションの環境構築〜デプロイとする。
 
 ### 1. CircleCIを介さない方法でAnsible Playbookの実行
 #### Ansibleのインストールとplaybookの実行
@@ -150,15 +154,15 @@ Select number: 1
 Vagrant instance y/n: n
 Input target host name: ホスト名
  + spec/
- + spec/ansible_client/
- + spec/ansible_client/sample_spec.rb
+ + spec/ホスト名/
+ + spec/ホスト名/sample_spec.rb
  + spec/spec_helper.rb
  + Rakefile
  + .rspec
  ```
 
 ### CircleCI側で行うこと
- テスト対象サーバーに接続できるように`~/.ssh/config`を設定
+* テスト対象サーバーに接続できるように`~/.ssh/config`を設定
  ```~/.ssh/config
  Host ホスト名
   HostName 対象サーバーのパブリックIPアドレス
@@ -166,8 +170,8 @@ Input target host name: ホスト名
   StrictHostKeyChecking no
  ```
 
-[spec_helper.rb](../serverspec/spec/spec_helper.rb)のuserの変更と、
- テスト内容を[sample_spec.rb](../serverspec/spec/ansible_client/sample_spec.rb)に記載する。
+* [spec_helper.rb](../serverspec/spec/spec_helper.rb)のuserの変更
+* テスト内容を[sample_spec.rb](../serverspec/spec/ansible_client/sample_spec.rb)に記載
 
 ### 結果
  CircleCIの`execute serverspec`の結果
