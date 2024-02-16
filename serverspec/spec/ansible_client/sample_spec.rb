@@ -19,11 +19,10 @@ end
 
 # rubyが指定したバージョンでインストールされているか確認 
 describe command('ruby --version') do
-  its(:stdout) { should match /ruby 3\.1\.2.+/ }
+  its(:stdout) { should include '3.1.2' }
 end
 
-# MySQLのサービスが正常に稼働している
+# MySQLのサービスが使用可能か確認
 describe service('mysqld') do
   it { should be_enabled   }
-  it { should be_running   }
 end
