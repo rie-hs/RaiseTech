@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-listen_port = 80 # 80に変更
+listen_port = 8080 # 80に変更
 
 # nginxがインストールされているか確認
 describe package('nginx') do
