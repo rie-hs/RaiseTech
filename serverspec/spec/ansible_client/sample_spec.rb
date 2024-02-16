@@ -7,7 +7,7 @@ describe package('nginx') do
   it { should be_installed }
 end
 
-# 指定したポートがリッスンされているかどうかを確認
+# 指定したポートがリッスンされているかどうか確認
 describe port(listen_port) do
   it { should be_listening }
 end
