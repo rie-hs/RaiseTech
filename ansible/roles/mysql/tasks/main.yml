@@ -38,3 +38,9 @@
   template:
     src: database.yml.j2
     dest: "{{ app_dir }}/config/database.yml"
+
+- name: Start mysql
+  service:
+    name: mysql
+    enabled: yes
+    state: started

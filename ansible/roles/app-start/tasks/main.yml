@@ -24,12 +24,6 @@
   args:
     chdir: "{{ app_dir }}"
 
-- name: Start mysql
-  service:
-    name: mysql
-    enabled: yes
-    state: started
-
 - name: Restart nginx
   become: yes
   service:
