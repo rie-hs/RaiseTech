@@ -129,7 +129,7 @@ $ touch serverspec
 $ cd serverspec
 $ bundle init
 ```
-[Gemfile](./serverspec/Gemfile)に必要なGemを記載するし`bundle install`を実行
+[Gemfile](../serverspec/Gemfile)に必要なGemを記載するし`bundle install`を実行
 ```
 $ bundle install --path vendor/bundle
 ```
