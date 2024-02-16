@@ -129,7 +129,7 @@ $ touch serverspec
 $ cd serverspec
 $ bundle init
 ```
-[Gemfile](../serverspec/Gemfile)に必要なGemを記載するし`bundle install`を実行
+[Gemfile](../serverspec/Gemfile)に必要なGemを記載し、`bundle install`を実行
 ```
 $ bundle install --path vendor/bundle
 ```
@@ -169,8 +169,7 @@ Input target host name: ホスト名
   User ec2-user
   StrictHostKeyChecking no
  ```
-
-* [spec_helper.rb](../serverspec/spec/spec_helper.rb)のuserの変更
+* [spec_helper.rb](../serverspec/spec/spec_helper.rb)のuserを変更
 * テスト内容を[sample_spec.rb](../serverspec/spec/ansible_client/sample_spec.rb)に記載
 
 ### 結果
