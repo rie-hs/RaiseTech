@@ -19,7 +19,8 @@ end
 
 # rubyが指定したバージョンでインストールされているか確認 
 describe command('ruby --version') do
-  its(:stdout) { should include '3.1.2' }
+  let(:path) { '/home/ec2-user/.rbenv/shims:$PATH' }
+  its(:stdout) { should match /ruby 3\.1\.2/ }
 end
 
 # MySQLのサービスが使用可能か確認
