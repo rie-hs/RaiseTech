@@ -16,3 +16,13 @@ end
 describe command('curl http://127.0.0.1:#{listen_port}/_plugin/head/ -o /dev/null -w "%{http_code}\n" -s') do
   its(:stdout) { should match /^200$/ }
 end
+
+# rubyが指定したバージョンでインストールされているか確認 
+describe command('ruby --version') do
+  its(:stdout) { should match /ruby 3\.1\.2.+/ }
+end
+
+# MySQLのサービスが正常に稼働している
+describe service('mysqld') do
+  it { should be_enabled   }
+end
