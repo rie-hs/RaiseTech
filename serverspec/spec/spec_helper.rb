@@ -23,8 +23,8 @@ options[:user] ||= 'ec2-user'
 set :host,        options[:host_name] || host
 set :ssh_options, options
 
-# Disable sudo
-# set :disable_sudo, true
+ Disable sudo
+ set :disable_sudo, true
 
 
 # Set environment variables
