@@ -1,0 +1,27 @@
+---
+- name: Check node install
+  shell: bash -lc "node -v | grep {{ node_version }}"
+  register: node_check_install
+  changed_when: no
+  ignore_errors: yes
+
+- name: Install nvm # Node.jsのバージョン管理ツールnvmをインストール
+  shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+  when: node_check_install is failed
+
+- name: Check nvm command
+  command: command -v nvm
+  register: nvm_check_command
+  changed_when: no
+  ignore_errors: yes
+
+- name: Source .bash_profile if nvm is not detected
+  shell: source ~/.bash_profile
+  when: nvm_check_command is failed
+
+- name: Install node
+  shell: bash -lc "nvm install {{ node_version }}"
+  when: node_check_install is failed
+
+- name: Install yarn
+  shell: bash -lc "npm install --global yarn"

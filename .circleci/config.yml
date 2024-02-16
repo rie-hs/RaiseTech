@@ -1,6 +1,10 @@
 version: 2.1
 orbs:
   python: circleci/python@2.0.3
+  aws-cli: circleci/aws-cli@4.1.2
+  ansible-playbook: orbss/ansible-playbook@0.0.5
+  ruby: circleci/ruby@2.1.1
+
 jobs:
   cfn-lint:
     executor: python/default
@@ -12,7 +16,126 @@ jobs:
           command: |
             cfn-lint -i W3002 -t cloudformation/*.yml
 
+  deploy cloudformation:
+    executor: aws-cli/default
+    steps:
+      - checkout
+      - aws-cli/setup:
+          aws_access_key_id: AWS_ACCESS_KEY_ID
+          aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+          region: AWS_DEFAULT_REGION
+      - run:
+          name: Deploy cloudformation
+          command: |
+            aws cloudformation deploy --template-file cloudformation/lecture13_Network.yml --stack-name lecture13-Network
+            aws cloudformation deploy --template-file cloudformation/lecture13_Security.yml --stack-name lecture13-Security --parameter-overrides MyIP=$MY_IP --capabilities CAPABILITY_IAM
+            aws cloudformation deploy --template-file cloudformation/lecture13_Application.yml --stack-name lecture13-Application
+      - run:
+          name: Get environment variable of EC2 public IP
+          command: |
+            AWS_EC2_PUBLIC_IP=$(aws cloudformation describe-stacks\
+              --stack-name lecture13-Application \
+              --query "Stacks[0].Outputs[?OutputKey=='EC2PublicIp'].OutputValue" \
+              --output text)
+            echo "AWS_EC2_PUBLIC_IP: $AWS_EC2_PUBLIC_IP"
+            echo "AWS_EC2_PUBLIC_IP=$AWS_EC2_PUBLIC_IP" > /home/circleci/env_var.txt
+      - run:
+          name: Get environment variable of RDS endpoint
+          command: |
+            AWS_RDS_ENDPOINT=$(aws cloudformation describe-stacks \
+              --stack-name lecture13-Application \
+              --query "Stacks[0].Outputs[?OutputKey=='RDSInstanceEndpoint'].OutputValue" \
+              --output text)
+            echo "AWS_RDS_ENDPOINT: $AWS_RDS_ENDPOINT"
+            echo "AWS_RDS_ENDPOINT=$AWS_RDS_ENDPOINT" >> /home/circleci/env_var.txt
+      - run:
+          name: Get environment variable of ALB DNS name
+          command: |
+            AWS_ALB_DNS_NAME=$(aws cloudformation describe-stacks \
+              --stack-name lecture13-Application \
+              --query "Stacks[0].Outputs[?OutputKey=='ALBDNSName'].OutputValue" \
+              --output text)
+            echo "AWS_ALB_DNS_NAME: $AWS_ALB_DNS_NAME"
+            echo "AWS_ALB_DNS_NAME=$AWS_ALB_DNS_NAME" >> /home/circleci/env_var.txt
+      - persist_to_workspace:
+          root: /home/circleci
+          paths:
+            - env_var.txt
+      - run:
+          name: check env vars
+          command: cat /home/circleci/env_var.txt
+
+  execute ansible:
+    executor: ansible-playbook/default
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /home/circleci
+      - run:
+          name: Set environment variables
+          command: |
+            echo "export AWS_EC2_PUBLIC_IP=$(grep '^AWS_EC2_PUBLIC_IP=' /home/circleci/env_var.txt | cut -d '=' -f 2-)" >> $BASH_ENV
+            echo "export AWS_RDS_ENDPOINT=$(grep '^AWS_RDS_ENDPOINT=' /home/circleci/env_var.txt | cut -d '=' -f 2-)" >> $BASH_ENV
+            echo "export AWS_ALB_DNS_NAME=$(grep '^AWS_ALB_DNS_NAME=' /home/circleci/env_var.txt | cut -d '=' -f 2-)" >> $BASH_ENV
+      - ansible-playbook/install:
+          version: 2.10.7
+      - add_ssh_keys:
+          fingerprints:
+            - "SHA256:xkKPs9zw43wqifa6k8pVF45DEv/cYXQQIO8WJrS06Y4"
+      - run:
+          name: Add StrictHostKeyChecking no to ~/.ssh/config
+          command: |
+            echo -e "Host *\n  StrictHostKeyChecking no" >> ~/.ssh/config
+            cat ~/.ssh/config
+      - run:
+          name: Generate inventory file
+          command: |
+            AWS_EC2_PUBLIC_IP=$AWS_EC2_PUBLIC_IP
+            echo -e "[ansible_client]\n$AWS_EC2_PUBLIC_IP" >> ansible/inventory
+      - run:
+          name: Check ansible/inventory
+          command: |
+            cat ansible/inventory
+      - ansible-playbook/playbook:
+          playbook: ansible/playbook.yml
+          playbook-options: -i ansible/inventory
+
+  execute serverspec:
+    executor: ruby/default
+    steps:
+      - checkout
+      - attach_workspace:
+          at: /home/circleci
+      - run:
+          name: Set environment variable of host
+          command: |
+            echo "export AWS_EC2_PUBLIC_IP=$(grep '^AWS_EC2_PUBLIC_IP=' /home/circleci/env_var.txt | cut -d '=' -f 2-)" >> $BASH_ENV
+      - run:
+          name: Configure ~/.ssh/config
+          command: |
+            AWS_EC2_PUBLIC_IP=$AWS_EC2_PUBLIC_IP
+            echo -e "Host ansible_client\n  HostName $AWS_EC2_PUBLIC_IP\n  User ec2-user\n  StrictHostKeyChecking no" >> ~/.ssh/config
+            cat ~/.ssh/config
+      - ruby/install:
+          version: '3.1.2'
+      - ruby/install-deps:
+          app-dir: serverspec
+      - run:
+          name: execute serverspec
+          command: |
+            cd serverspec
+            bundle exec rake spec
+
 workflows:
   raisetech:
     jobs:
       - cfn-lint
+      - deploy cloudformation:
+          requires:
+            - cfn-lint
+      - execute ansible:
+          requires:
+            - deploy cloudformation
+      - execute serverspec:
+          requires:
+            - execute ansible

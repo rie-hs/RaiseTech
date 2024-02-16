@@ -1,0 +1,37 @@
+---
+- name: Configure development.rb
+  template:
+    src: development.rb.j2
+    dest: "{{ app_dir }}/config/environments/development.rb"
+
+- name: Set S3
+  template:
+    src: storage.yml.j2
+    dest: "{{ app_dir }}/config/storage.yml"
+
+- name: bundle install
+  shell: bash -lc "bundle install"
+  args:
+    chdir: "{{ app_dir }}"
+
+- name: Precompile application assets
+  shell: bash -lc "rails assets:precompile"
+  args:
+    chdir: "{{ app_dir }}"
+
+- name: Run bin/setup
+  shell: bash -lc "bin/setup"
+  args:
+    chdir: "{{ app_dir }}"
+
+- name: Restart nginx
+  become: yes
+  service:
+    name: nginx
+    state: restarted
+
+- name: Start unicorn
+  shell: bash -lc "bundle exec unicorn_rails -c config/unicorn.rb -E development -D"
+  args:
+    chdir: "{{ app_dir }}"
+  ignore_errors: true
