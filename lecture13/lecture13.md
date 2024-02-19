@@ -5,8 +5,7 @@ CircleCIのサンプルにServerSpecやAnsibleの処理を追加する。
 ![全体構成図](./lecture13-images/13-01_map.png)
 
 AWS構成図
-![AWS構成図](./lecture13-images/13-13_AWS.drawio.png)
-
+![AWS構成図](./lecture13-images/13−13_AWS.drawio.png)
 
 ### CircleCIのWorkflow全体の結果
 ![Workflow](./lecture13-images/13-02_workflow.png)
