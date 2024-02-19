@@ -9,13 +9,15 @@ Parameters:
     Default: RaiseTech-lecture13
 
   AvailabilityZone1a:
-    Description: Please input Availability Zone
     Type: AWS::EC2::AvailabilityZone::Name
+    AllowedValues:
+      - ap-northeast-1a
     Default: ap-northeast-1a
 
   AvailabilityZone1c:
-    Description: Please input Availability Zone
     Type: AWS::EC2::AvailabilityZone::Name
+    AllowedValues:
+      - ap-northeast-1c
     Default: ap-northeast-1c
 
 Resources: 
@@ -151,19 +153,19 @@ Outputs:
   PubSubnet1:
     Value: !Ref PublicSubnet1
     Export:
-      Name: !Sub ${NameBase}-PubSubnet-01-ID
+      Name: !Sub ${NameBase}-PubSubnet-01-ID-${AvailabilityZone1a}
 
   PubSubnet2:
     Value: !Ref PublicSubnet2
     Export:
-      Name: !Sub ${NameBase}-PubSubnet-02-ID
+      Name: !Sub ${NameBase}-PubSubnet-02-ID-${AvailabilityZone1c}
 
   PriSubnet1:
     Value: !Ref PrivateSubnet1
     Export:
-      Name: !Sub ${NameBase}-PriSubnet-01-ID
+      Name: !Sub ${NameBase}-PriSubnet-01-ID-${AvailabilityZone1a}
 
   PriSubnet2:
     Value: !Ref PrivateSubnet2
     Export:
-      Name: !Sub ${NameBase}-PriSubnet-02-ID
+      Name: !Sub ${NameBase}-PriSubnet-02-ID-${AvailabilityZone1c}

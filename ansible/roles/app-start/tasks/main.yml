@@ -15,7 +15,7 @@
     chdir: "{{ app_dir }}"
 
 - name: Precompile application assets
-  shell: bash -lc "rails assets:precompile"
+  shell: bash -lc "bin/rails assets:precompile"
   args:
     chdir: "{{ app_dir }}"
 

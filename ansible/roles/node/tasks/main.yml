@@ -6,7 +6,8 @@
   ignore_errors: yes
 
 - name: Install nvm # Node.jsのバージョン管理ツールnvmをインストール
-  shell: curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+  uri: https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh
+  method: GET
   when: node_check_install is failed
 
 - name: Check nvm command

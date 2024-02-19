@@ -4,8 +4,11 @@ CircleCIのサンプルにServerSpecやAnsibleの処理を追加する。
 本課題の手順を下の図のように考えて課題を進めた。
 ![全体構成図](./lecture13-images/13-01_map.png)
 
+AWS構成図
+![AWS構成図](./lecture13-images/13-13_AWS.drawio.png)
 
-CircleCIのWorkflow全体の結果
+
+### CircleCIのWorkflow全体の結果
 ![Workflow](./lecture13-images/13-02_workflow.png)
 
 ## ① CloudFormationのテンプレートを用いてスタックの作成
@@ -49,7 +52,7 @@ CircleCIのWorkflow全体の結果
 
 ## ② Ansible Playbookの実行
 ①で作成したEC2をターゲットノードとし、AnsibleのPlaybookを実行する。
-Playbookの内容は、第5回課題[第5回課題](../lecture05.md)のサンプルアプリケーションの環境構築〜デプロイとする。
+Playbookの内容は、[第5回課題](../lecture05.md)のサンプルアプリケーションの環境構築〜デプロイとする。
 
 ### 1. CircleCIを介さない方法でAnsible Playbookの実行
 #### Ansibleのインストールとplaybookの実行
@@ -82,6 +85,8 @@ playbookのモジュールの記載方法
 * [ansible.builtin.rpm_key module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/rpm_key_module.html)
 * [ansible.builtin.template module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html)
 * [ansible.builtin.service module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/service_module.html)
+* [ansible.builtin.get_url module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/get_url_module.html)
+* [ansible.builtin.uri module](https://docs.ansible.com/ansible/latest/collections/ansible/builtin/uri_module.html)
 
 #### ansible-playbookのコマンドとオプション
 ```

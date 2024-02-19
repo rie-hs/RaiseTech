@@ -16,9 +16,8 @@
 
 - name: Download mysql rpm
   become: yes
-  shell: wget https://dev.mysql.com/get/mysql80-community-release-el7-11.noarch.rpm
-  args:
-    creates: /home/ec2-user/mysql80-community-release-el7-11.noarch.rpm
+  get_url:
+    url: https://dev.mysql.com/get/mysql80-community-release-el7-11.noarch.rpm
 
 - name: Install mysql rpm
   become: yes

@@ -66,7 +66,7 @@ Resources:
             Value: !Sub ${NameBase}-ALBSG
 
 # IAMロールの作成
-  IAMRole:
+  IAMROLE:
     Type: AWS::IAM::Role
     Properties:
       Path: /
@@ -93,7 +93,7 @@ Resources:
         - arn:aws:iam::aws:policy/AmazonS3FullAccess
 
 # IMAインスタンスプロファイルの作成：EC2インスタンスとロールを紐づけるために作成
-  InstanceProfile:
+  INSTANCEPROFILE:
     Type: AWS::IAM::InstanceProfile
     Properties:
       Path: /
