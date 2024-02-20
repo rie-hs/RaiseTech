@@ -1,0 +1,160 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: RaiseTech-lecture13-Application template
+
+Parameters: 
+  NameBase:
+    Description: this is base name.
+    Type: String
+    Default: RaiseTech-lecture13
+
+  KeyPair:
+    Type: AWS::EC2::KeyPair::KeyName
+    Description: Name of an existing EC2 KeyPair to enable SSH access to the instances
+    Default: id_ed25519 #RaiseTech-lecture13-KeyPair 課題用に変更
+
+  EC2ImageID:
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: "/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2"
+
+  RDSMasterUserPassword:
+    NoEcho: true
+    Type: String
+    MinLength: 8
+    MaxLength: 41
+    AllowedPattern: "[a-zA-Z0-9]*"
+    Default: RDSpassword1
+
+Resources:
+# EC2インスタンスの作成
+  EC2:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref KeyPair
+      DisableApiTermination: false
+      ImageId: !Ref EC2ImageID
+      InstanceType: t2.micro
+      Monitoring: true
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: "true"
+          DeviceIndex: "0"
+          SubnetId: !ImportValue RaiseTech-lecture13-PubSubnet-01-ID
+          GroupSet:
+          - !ImportValue RaiseTech-lecture13-EC2SG-ID
+      UserData: !Base64 |
+        #!/bin/bash -ex
+        yum update -y
+      IamInstanceProfile:
+        !ImportValue RaiseTech-lecture13-InstanceProfile-Name
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-EC2
+
+# RDS関連の作成
+  RDSDBSubnetGroup:
+    Type: AWS::RDS::DBSubnetGroup
+    Properties:
+      DBSubnetGroupDescription: lecture13-RDS-SubnetGroup
+      SubnetIds:
+        - !ImportValue RaiseTech-lecture13-PriSubnet-01-ID
+        - !ImportValue RaiseTech-lecture13-PriSubnet-02-ID
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-RDSDBSubnetGroup
+
+  RDS:
+    Type: AWS::RDS::DBInstance
+    Properties:
+      AllocatedStorage: 20
+      DBInstanceClass: db.t3.micro
+      AutoMinorVersionUpgrade: true
+      BackupRetentionPeriod: 1
+      Engine: mysql 
+      MasterUsername: admin
+      MasterUserPassword: !Ref RDSMasterUserPassword
+      DBSubnetGroupName: !Ref RDSDBSubnetGroup
+      MultiAZ: false
+      PubliclyAccessible: false
+      StorageEncrypted: true
+      StorageType: gp2
+      VPCSecurityGroups:
+        - !ImportValue RaiseTech-lecture13-RDSSG-ID
+      Tags:
+        - Key: Name
+          Value: !Sub ${NameBase}-RDS
+
+# ALBの作成
+  ALB:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: ipv4
+      Name: !Sub ${NameBase}-ALB
+      Scheme: internet-facing
+      SecurityGroups: 
+        - !ImportValue RaiseTech-lecture13-ALBSG-ID
+      Subnets: 
+        - !ImportValue RaiseTech-lecture13-PubSubnet-01-ID
+        - !ImportValue RaiseTech-lecture13-PubSubnet-02-ID
+      Tags: 
+        - Key: Name
+          Value: !Sub ${NameBase}-ALB
+      Type: application
+
+# ALB用のターゲットグループの作成
+  ALBTG:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckEnabled: true
+      HealthCheckIntervalSeconds: 30
+      HealthCheckPath: /
+      HealthCheckPort: 80
+      HealthCheckProtocol: HTTP
+      HealthCheckTimeoutSeconds: 5
+      HealthyThresholdCount: 5
+      IpAddressType: ipv4
+      Matcher: 
+        HttpCode: 200
+      Name: !Sub ${NameBase}-ALBTG
+      Port: 80
+      Protocol: HTTP
+      ProtocolVersion: HTTP1
+      Tags: 
+        - Key: Name
+          Value: !Sub ${NameBase}-ALBTG
+      Targets: 
+        - Id: !Ref EC2
+      TargetType: instance
+      UnhealthyThresholdCount: 2
+      VpcId: !ImportValue RaiseTech-lecture13-VPC-ID
+
+# リスナーの作成
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions: 
+        - TargetGroupArn: !Ref ALBTG
+          Type: forward
+      LoadBalancerArn: !Ref ALB
+      Port: 80
+      Protocol: HTTP
+
+# S3バケットの作成
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties: 
+      BucketName: raisetech-lecture13-s3 # バケット名は大文字使用不可
+
+Outputs:
+  EC2PublicIp:
+    Value: !GetAtt EC2.PublicIp
+    Export:
+      Name: !Sub ${NameBase}-EC2-PublicIp
+
+  RDSInstanceEndpoint:
+    Value: !GetAtt RDS.Endpoint.Address
+    Export:
+      Name: !Sub ${NameBase}-RDS-Endpoint
+
+  ALBDNSName:
+    Value: !GetAtt ALB.DNSName
+    Export:
+      Name: !Sub ${NameBase}-ALB-DNSName

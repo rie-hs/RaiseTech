@@ -1,0 +1,39 @@
+---
+- name: Remove MariaDB # mariadbがある場合を想定して先に削除
+  become: yes
+  yum:
+    name: "{{ item }}" 
+    state: absent
+  with_items:
+    - mysql-server
+    - mariadb*
+
+- name: Import GPG-Key # GPGキーをインポート
+  become: yes
+  rpm_key:
+    state: present
+    key: https://repo.mysql.com/RPM-GPG-KEY-mysql-2022
+
+- name: Download mysql rpm
+  become: yes
+  get_url:
+    url: https://dev.mysql.com/get/mysql80-community-release-el7-11.noarch.rpm
+
+- name: Install mysql rpm
+  become: yes
+  yum:
+    name: /home/ec2-user/mysql80-community-release-el7-11.noarch.rpm
+    state: present
+
+- name: Install mysql-community-devel and server
+  become: yes
+  yum:
+    name:
+      - mysql-community-devel
+      - mysql-community-server
+    state: present
+
+- name: Configure database
+  template:
+    src: database.yml.j2
+    dest: "{{ app_dir }}/config/database.yml"
