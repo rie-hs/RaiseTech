@@ -96,7 +96,6 @@ $ bin/dev
 * http://IPアドレス:3000/ でサンプルアプリケーションの動作確認ができた
 ![Puma動作確認](./lecture05-images/05-01_kumikomi.png)
 
-
 ## NginxとUnicornに分けてのサンプルアプリケーションの動作確認
 
 ### Nginx側の設定
