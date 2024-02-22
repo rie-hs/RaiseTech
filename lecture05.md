@@ -61,8 +61,6 @@ $ cd raisetech-live8-sample-app
 
 ### MySQLの設定
 ```shell
-# MySQLをインストール (MariaDBを削除し、MySQLをインストール)
-$ curl -fsSL https://raw.githubusercontent.com/MasatoshiMizumoto/raisetech_documents/main/aws/scripts/mysql_amazon_linux_2.sh | sh
 # database.ymlを作成
 $ cp config/database.yml.sample config/database.yml
 ```
@@ -196,7 +194,7 @@ listen '/home/ec2-user/raisetech-live8-sample-app/unicorn.sock'
 pid    '/home/ec2-user/raisetech-live8-sample-app/unicorn.pid'
 ```
 
-#### ec2-userディレクトリに他のユーザー(nginx)の権限を付与する（書き込みと実行の権限付与）
+#### ec2-userディレクトリに他のユーザー(nginx)の権限を付与する（読み取りと実行の権限付与）
 ```shell
 $ chmod 755 /home/ec2-user
 ```
