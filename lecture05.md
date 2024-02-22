@@ -60,11 +60,11 @@ $ cd raisetech-live8-sample-app
 ```
 
 ### MySQLの設定
+#### `config/database.yml`を編集
 ```shell
 # database.ymlを作成
 $ cp config/database.yml.sample config/database.yml
 ```
-#### `config/database.yml`を編集
 ```config/database.yml
 default: &default
   adapter: mysql2
