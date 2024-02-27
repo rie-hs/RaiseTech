@@ -6,6 +6,7 @@
 
 ### 構成図
 最終的に構築した環境の構成図
+
 ![AWS最終構成図](./lecture13/lecture13-images/13−13_AWS.drawio.png)
 
 ## 学習内容
