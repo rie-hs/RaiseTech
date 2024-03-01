@@ -23,5 +23,5 @@
 ## EC2の接続
 ![画像](./lecture04-images/lecture04_EC2connect.png)
 
-## EC2 から RDS へ接続
+## EC2からRDSへ接続
 ![画像](./lecture04-images/lecture04_EC2andRDS.png)

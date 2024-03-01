@@ -6,7 +6,7 @@
 ## AP サーバーの名前とバージョン&動作確認
 - Puma version 5.6.5
 - APサーバーを終了すると青文字でOopsという表示になりアクセスできなくなった。
-- bin/setup　bin/cloud9_dev　実行で再度サンプルアプリケーションが表示される
+- bin/setupとbin/cloud9_devの実行で再度サンプルアプリケーションが表示される
 
 ## DB サーバーの名前とバージョン&動作確認
 - MySQL version8.0.34
