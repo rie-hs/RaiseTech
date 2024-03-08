@@ -7,7 +7,7 @@
 ### 構成図
 最終的に構築した環境の構成図
 
-![AWS最終構成図](./lecture14/lecture14-images/lecture14.drawio.png)
+![AWS最終構成図](./lecture14/lecture14-images/lecture14-drawio.png)
 
 ## 学習内容
 |講座番号|学習テーマ|学習/課題内容|提出課題|
